@@ -1,388 +1,450 @@
-# Intermediate Mongo Queries
-
-There are numerous operators that we can use in our queries to answer more and more complex questions related to our collection. Some of these operators help with learning more about the data stored in the collection whereas others help with understanding the metadata. This document will take you through those operators, which are categorized as follows:
-
-* Comparison Operators
-* Logical Operators
-* Element Operators
-* Array Operators
-
-:book: [Read more](https://docs.mongodb.com/manual/reference/operator/query/) about **query selectors**. 
-
-:arrow_right: Switch over to the `movieDetails` collection for the following exercises. 
-
-## Comparison Operators
-
-
-Comparison operators are used in conditions that compare one expression with another, typically containing a boolean return value.  
-
-The MongoDB query language is unique because it uses **Comparison Operators** in two different ways:  
-- Comparison Query Operators
-- Comparison Aggregation Operators
-
-Let's take a quick :eyes: at what is available for **Query Selector** operations.
-
-**Comparison Query Operators**
-
-|Name|Description|
-|---|---|
-|$eq|Matches values that are equal to a specified value.|
-|$gt | Matches values that are greater than a specified value.|
-|$gte | Matches values that are greater than or equal to a specified value.|
-|$in | Matches any of the values specified in an array.|
-|$lt | Matches values that are less than a specified value.|
-|$lte | Matches values that are less than or equal to a specified value.|
-|$ne | Matches all values that are not equal to a specified value.|
-|$nin | Matches none of the values specified in an array.|
-
-### Working with a single field
-
-**Exercise 1** :computer: 
-
-In the following query, we look at movies which were made in the year 1970 or before.
-
-**query:**
-
-```javascript
-db.movieDetails.find({year: {"$lte": 1970}}, 
-    {title: 1, _id: 0})
-```
-
-**Exercise 2** :computer: 
-
-What about movies which were made in or before 1970 but after 1965?
-
-**query:**
-```javascript
-db.movieDetails.find({year: {"$lte": 1970, "$gt": 1965}}, 
-    {title: 1, _id: 0})
-```
----
-
-### Working with multiple fields
-
-**Exercise 3** :computer: 
-
-List the movies which had a runtime longer than 3 hours and had a `imdb.rating` higher than 8.
-
-**query:**
-```javascript
-db.movieDetails.find({"runtime": {"$gt": 180},
-    "imdb.rating": {"$gt":8}}, 
-    {"title": 1, "_id": 0})
-```
----
-
-### The "$ne" query operator
-
-`ne` stands for **not equal**. Therefore the use of this operator filters out records where the matching condition is not true.
-
-**Exercise 3** :computer: 
-
-Filter out records where the `rating` field does not contain the value of 'NOT RATED'.   
-
-**query:**
-```javascript
-db.movieDetails.find({"rated": {"$ne": "NOT RATED"}}, 
-    {"_id":0, "title":1, "rated":1})
-```
-**result:** (Only a part of the output has been shown.)
-```javascript
-{ "title" : "Zathura: A Space Adventure", "rated" : "PG" }
-{ "title" : "Space Cowboys", "rated" : "PG-13" }
-{ "title" : "Lost in Space", "rated" : "PG-13" }
-{ "title" : "Muppets from Space", "rated" : "G" }
-{ "title" : "Turks in Space", "rated" : null }
-```
-
-Look at the last document in the output above. The `rated` field has a `null` value. This is because `$ne` **only** excludes the documents where the `rated` field has a value of `NOT RATED`. All other values, (be it `APPROVED`, `R`, `PG-13`, `PG`, `null` etc) find their way into the result. In the same vein, `$ne` also outputs documents which do **not** have a `rated` field at all. 
-
-In a future exercise, we'll see how to find documents which do not have a given field. 
-
----
-
-### The "$in" query operator
-
-The `$in` operator allows us to specify 1 or more values in an array. If any 1 of those filter conditions is matched, a resulting document is returned. 
-
-**Exercise 4** :computer: 
-
-Find movies which were tagged as one of the following genres: `Sport`, `Talk-Show` or `News`. Pretty unusual genres for a movie!
-
-**query:**
-```javascript
-db.movieDetails.find({"genres": {"$in": ["Sport", "Talk-Show", "News"]}}, 
-    {"_id":0, "title":1, "genres":1})
-```
-
-**Exercise 5** :computer: 
-
-Use the `$nin` query operator (**not in** operator) to match **none** of the values specified in the array. 
-
----
-
-## Logical Operators
-
-These operators perform one of the following logical operations on the fields:
-
-Name | Description
---- | ---
-$and | Joins query clauses with a logical AND returns all documents that match the conditions of both clauses.
-$or | Joins query clauses with a logical OR returns all documents that match the conditions of either clause.
-$not | Inverts the effect of a query expression and returns documents that do not match the query expression.
-$nor | Joins query clauses with a logical NOR returns all documents that fail to match both clauses.
-
-
-### The "$or" operator
-This operator **OR**s the filters stated in a query and returns documents where atleast 1 of the filters is true. 
-
-**Exercise 1** :computer: 
-
-Write a query to list movies whose `imdb.rating` is greater than 8.5 or `metacritic` rating is greater than 85.
-
-:arrow_right: Note that the `$or` operator takes an **array** of values.
-
-Syntax Example:
-`{"$or":[{field:condition}, {field:condition}]}`
-
-**query:**
-```javascript
-db.movieDetails.find({"$or": [
-    {"imdb.rating": {"$gt": 8.5}}, 
-    {"metacritic": {"$gt": 85}}]}, 
-        {"_id": 0, "title": 1, "imdb.rating": 1, "metacritic": 1})
-```
----
-
-### The "$and" operator
-
-As you [already know](../exercises/01_basic-mongo-queries.md#Filtering-on-multiple-fields), MongoDB implicitly **AND**s the filters when separated by `,` in the query. 
-
-**Exercise 2** :computer: 
-
-To cover this next point we need to generate some output first.  Run the query below to get the output we need. 
-
-:bulb: Can you explain the different operators and parameters in this query without seeing the output?
-```javascript
-db.movieDetails.find({
-    "tomato.meter": {"$lt": 50}, 
-    "tomato.meter": {"$ne": null}}, 
-    {"_id": 0, "title": 1, "tomato.meter": 1})
-```
-**result:** (Only a part of the result has been shown.)
-```javascript
-{ "title" : "Once Upon a Time in the West", "tomato" : { "meter" : 98 } }
-{ "title" : "A Million Ways to Die in the West", "tomato" : { "meter" : 33 } }
-{ "title" : "Wild Wild West", "tomato" : { "meter" : 17 } }
-{ "title" : "Slow West", "tomato" : { "meter" : 92 } }
-{ "title" : "Journey to the West", "tomato" : { "meter" : 93 } }
-```
-
-Ideally, the 2 filter conditions would be **AND**ed. But :eyes: closely at the results and you'll see that the first filter condition `tomato.meter": {"$lt": 50}` was ignored. The result contains documents which have `tomato.meter` ratings greater than 50 as well. Why?
-
-:arrow_right: MongoDB requires **unique** key values to be provided in its queries. In cases like the one above, where both key values are identical (`tomato.meter` in both filters), the very last filter overwrites all the previous filters and documents that satisfy the last filter are returned. 
-
-This is where `$and` finds its use case. As you might've guessed, it is used to AND filter conditions where the key values are **not unique**. 
-
-Take 5 minutes :alarm_clock: to run the above query using the `$and` operator. Keep in mind that the `$and` takes an **array** of values just like `$or`.
-
----
-
-## Element Operators
-
-Since MongoDB is a non relational database:
-* there can be fields which are **present in one document** but **absent in another document**. 
-
-* there can also be fields in a collection that have **different data types** across documents. 
-
-Following are the operators that help us explore these aspects of our collection:
-
-Name | Description
---- | ---
-$exists | Matches documents that have the specified field.
-$type | Selects documents if a field is of the specified type.
-
-**Exercise 1** :computer: 
-
-Using the `$exists` operator, count the number of documents which contain the field `poster`.
-
-**query:**
-```javascript
-db.movieDetails.count({"poster": {"$exists": true}})
-```
-
-**Exercise 2** :computer: 
-
-* Using the `$exists` operator, count the number of documents which do **not** contain the field `poster`. 
-
-    *Hint: use `{"$exists": false}`*
-
-* Now add up the results obtained in exercises 1 and 2. Is it the same as the total collection size?
-
-* Take 5 minutes :alarm_clock: to explore the document structure with and without these fields using the `find()` method. 
-
-* Is the output of the following query the same as the one with `{"$exists": false}`? 
-
-    **query:**
-
-    ```javascript
-    db.movieDetails.count({"poster": null})
-    ```
+use exercices
+
+/* Select the following command and press Ctrl + Enter or click F9 (to execute the selected command) */
+/* The command saves some data to the database. 
+/* Afterwards the new database "movies" will be created */
+/* In the process a new collection called "comedy" will also be created in the database. */
+
+db.comedy.insert({name: 'Ted', year: 2012, tagline: 'Ted is coming',
+    cast: ['Mark Walhlberg', 'Mila Kunis', 'Seth MacFarlane'],
+    technical: {runningTime: 106, language: 'English', prizes: 13, nominations: 27},
+    sequel: 'Ted 2',
+    merits: {budget: 50, boxOffice: 535},
+    comments:[{by:'Steve', text:'Loved the movie'}, {by:'Dave', text:'Really funny!'}]})
+
+/* Right click on Collections at the left. Choose Refresh All */
+/* Right click on movies > Collections > comedy at the left. Choose Open Collection Tab => a new tab is opened. Take a look at it */
+/* There are multiple View Modes. You can change the View Mode using the buttons at the upper right. The default mode is Table View */
+
+/* New in version 3.2: insertOne: inserts a single document into a collection */    
+db.comedy.insertOne({name: 'We\'re the Millers', year: 2013, tagline: 'If anyone asks',
+    cast: ['Jennifer Aniston', 'Luis Guzmán', 'Ed Helms', 'Kathryn Hahn'],
+    technical: {runningTime: 110, language: 'English'},   
+    merits: {budget: 37, boxOffice: 270},
+    comments:[{by:'Taylor', text:'First class movie!'}, {by:'Rob', text:'I like it'}]})
     
-:arrow_right: Note that the query above returns not only documents where the `poster` field is `null` but also those documents where the `poster` field is absent. Check it out for yourself!
-
-**Exercise 3** :computer: 
-
-Explore the various datatypes present per field using the `$type` operator. Refer to the [documentation](https://docs.mongodb.com/manual/reference/operator/query/type/#op._S_type) for additional reference. You already know by now that `null` is considered a datatype in MongoDB.
-
-To help you get started, here's an example:
-
-**query:**
-```javascript
-db.movieDetails.find({"plot": {"$type": "string"}}).pretty()
-```
-
-**query:**
-```javascript
-db.movieDetails.find({"plot": {"$type": "null"}}).pretty()
-```
----
-
-## Array Operators
-
-In the following exercises, we'll look at operators for array fields. 
-
-Name | Description
---- | ---
-$all | Matches arrays that contain all elements specified in the query.
-$elemMatch | Selects documents if element in the array field matches all the specified $elemMatch conditions.
-$size | Selects documents if the array field is a specified size.
-
-### The "$all" query operator
-
-`$all` matches fields against an array of elements. A document is returned when all the elements listed in the query are found in the document's array field. 
-
-:arrow_right: Elements in the document's array are **not** required to be in the exact order as specified in the query. 
-
-**Exercise 1** :computer: 
-
-Use the `$all` operator to find movies which were both:  History and War `genres`. 
-
-**query:**
-```javascript
-db.movieDetails.find({"genres": {"$all": ['History', 'War']}}, 
-    {"_id": 0, "title": 1, "genres": 1})
-```
-
-:arrow_right: As you can see, returned documents contain both History and War `genres` in addition to others (like Documentary, Short etc) which were not specified in our query. Also note that the order of elements did not matter. 
-
----
-
-### The "$elemMatch" query operator
-
-One of the more powerful operators for arrays is `$elemMatch`. It matches array elements which are present in the same position and is best explained through an example. 
-
-Copy and run the following code in your mongo shell: (Revenue is in million dollars.)
-```javascript
-var1 = db.movieDetails.findOne({"title": "Shutter Island"})
-delete var1._id
-var1.boxOffice = [{"country": "America", "revenue": 127.3},{"country": "Overseas", "revenue": 166.5}]
-db.movieDetails.insertOne(var1)
-```
-
-What did we just do?!
-Simply put:
-* we created a variable called `var1`
-* added a reference to the document titled `"Shutter Island"` within that variable
-* went on to add another field called `boxOffice` to that variable which turns out to be an **array of objects**
-* inserted that variable in our collection as a document of its own
-
-Now when you run:
-```javascript
-db.movieDetails.find({"title": "Shutter Island"}).pretty()
-```
-you'll see that 2 documents are returned. One's the original document and the other is the one we just created with an additional `boxOffice` field. 
-
-The point of this was to add an **array of objects** field to our collection. Now onto the exercise where we'll see how to leverage `$elemMatch` to query this field. 
-
-**Exercise 2** :computer: 
-
-Take 5 minutes :alarm_clock: to find the movies where the `boxOffice` revenue in "America" was greater than 
-* $100m 
-* $150m
-
-How many of you ran similar queries?
-```javascript
-db.movieDetails.find({"boxOffice.country": "America", 
-    "boxOffice.revenue": {"$gt": 100}}).pretty()
+/* New in version 3.2: insertMany: inserts multiple documents into a collection */      
+db.comedy.insertMany([{name: 'The Hangover', year: 2009, tagline: 'Some guys just can\'t handle Vegas',
+    cast: ['Bradley Cooper', 'Ed Helms', 'Zach Galifianakis'],
+    technical: {runningTime: 100, language: 'English'},
+    sequel: 'The Hangover Part II',    
+    merits: {budget: 35, boxOffice: 467.5},
+    comments:[{by:'Alex', text:'Dude, it rocked'}, {by:'Steve', text:'The best movie ever!'}]},  
     
-db.movieDetails.find({"boxOffice.country": "America", 
-    "boxOffice.revenue": {"$gt": 150}}).pretty()
-```
+    {name: "The Hangover Part II", year: 2011, tagline:'Bangkok has them now',
+    cast: ['Bradley Cooper', 'Ed Helms', 'Zach Galifianakis'],
+    technical: {runningTime: 102, language: 'English'},
+    sequel: 'The Hangover Part III',    
+    merits: {budget: 80, boxOffice: 581},
+    comments:[{by:'Anne', text:'Liked the first part better'}, {by:'Robin', text:'Over the top'}]}])
 
-:arrow_right: Note that the first query runs correctly by returning the document with "Shutter Island" `boxOffice`, but the second query returns the same result even though it is :x:!!! 
-There is no movie in our collection with revenue greater than $150m in America. 
+/* Insert a new comedy
+    - name: 'Ted 2'
+    - year: 2015
+    - tagline: 'Ted is coming, again' 
+    - cast: ['Mark Walhlberg', 'Seth MacFarlane', 'Amanda Seyfried', 'Morgan Freeman']
+    - technical: {runningTime: 115, language: 'English'},   
+    - merits: {budget: 85} 
+    - comments:[{by:'Anne', text:'Funny'}, {by:'Kate', text:'I still love Ted'}, {by:'Leo', text:'Nice movie'}]
+    */
+db.comedy.insert({name: 'Ted 2', year: 2015, tagline: 'Ted is coming again',
+    cast: ['Mark Walhlberg', 'Seth MacFarlane', 'Amanda Seyfried', 'Morgan Freeman'],
+    technical: {runningTime: 115, language: 'English'}, 
+    sequel: 'Ted 2',
+    merits: {budget: 85},
+    comments:[{by:'Anne', text:'Funny'}, {by:'Kate', text:'I still love Ted'}, {by:'Leo', text:'Nice movie'}]})
 
-This happened because the query ran the following checks: 
-* is `boxOffice.country` equal to "America" :white_check_mark:
-* is `boxOffice.revenue` greater than $150m :white_check_mark:
 
-Both checks were satisfied at **different array positions**!!!
 
-Here's where `$elemMatch` comes in. It ensures that array elements present **in the same position** are evalauted. 
+/* To read all data from a collection */
+db.comedy.find()
 
-Try the following 2 queries: 
-```javascript
-db.movieDetails.find({"boxOffice": 
-    {"$elemMatch": 
-        {"country": "America", "revenue": 
-            {"$gt": 100}}}}).pretty()
-            
-db.movieDetails.find({"boxOffice": 
-    {"$elemMatch": 
-        {"country": "America", "revenue": 
-            {"$gt": 150}}}}).pretty()
-```
+/* Conditional operators */
+/* How do you do an 'equal to' query? Just match the value for the queried key */
+db.comedy.find({year: 2012})
 
-See the difference?! :eyes:
+/* Find all movies released in the year 2013 */
 
----
 
-### The "$size" query operator
+/* Use these special forms for greater than and less than comparisons in queries, 
+since they have to be represented in the query document:
+    - db.collection.find({ "field" : { $gt: value } } );   // greater than  : field > value
+    - db.collection.find({ "field" : { $lt: value } } );   // less than  :  field < value
+    - db.collection.find({ "field" : { $gte: value } } );  // greater than or equal to : field >= value 
+    - db.collection.find({ "field" : { $lte: value } } );  // less than or equal to : field <= value
+*/
+db.comedy.find({year: {$lt: 2012}})
+db.comedy.find({year: {$gt: 2010}})
 
-As the name suggests, this operator deals with the length of an array. 
+/* Find all movies from the year 2011 until now */
 
-**Exercise 3** :computer: 
 
-* What were the maximum number of countries a movie was shot in? And which were those movies?
+/* To search an object inside an object, just use the regular JavaScript dot notation 
+   of the target object as the key and quote it. The '' around 'merits.budget' are mandatory */
+/* Find all movies with a budget over 50 million dollar */
+db.comedy.find({'merits.budget': {$gt: 50}})
 
-    **query:**
+/* Find all movies of which the runningTime is longer than 105 minutes */
+db.comedy.find({"technical.runningTime":{$gt: 105}})
 
-    ```javascript
-    db.movieDetails.find({"countries": {"$size": 6}}, 
-        {"_id": 0, "title": 1, "countries": 1})
-    ``` 
+/* Find all movies of which the language is English */
+db.comedy.find({"technical.language": "English"})
 
-Would you have liked to be a part of that movie and traveled to all those countries? :earth_africa:
+/* You can also combine these operators to specify ranges */
+db.comedy.find({year: {$gt: 2010, $lt: 2013}})
 
----
-## Group Activities
-During this time the class should split into :five: groups to complete each section.
+/* Find all movies with runningTime between 100 and 110 */
+db.comedy.find({"technical.runningTime": {$gt: 100, $lt: 110}})
 
-**Activity 1: :alarm_clock: 15 minutes** 
+/* Until now all fields of the documents are shown in the result */
+/* What if you want to get only some particular field in the result? */
+db.comedy.find({year: {$lt:2012}}, {name:true})
 
-Let's figure out some weekend plans! Get together with the rest of your group and look at movies from a genre(s) you all like. Pick a couple of highly rated movies that you haven't watched yet and let the rest of the class know that these will be on your list! Also, are there some medium or low rated movies from that genre(s) that you've already watched? Do you agree with the rating? Why?
+/* In the above example, we excluded most fields by not specifying them 
+in the second parameter of the find() function. 
+To get more than one exclusive field in the results you might do something like this */
+db.comedy.find({year: {$lt:2012}}, {name:true, year:true})
 
-**Activity 2: :alarm_clock: 15 minutes**
+/* Give name and boxOffice of all movies with boxOffice over 500 million dollar */
+db.comedy.find({"merits.boxOffice": {$gt:500}}, {name:true, "merits.boxOffice":true})
 
-Explore the different datasets available on your workstation.  Be creative and try to find interesting things.  
-Some questions to consider while exploring:
-- How is this data structured?
-- Is there anything interesting to me about this data?
-- Is the data malformed, incorrect or incomplete?
-- What are the challenges you faced while exploring this data?
+/* What if you want to get almost all except for some fields in the result? */
+db.comedy.find({year: {$lt:2012}}, {name:false})
 
-**Presentation: :alarm_clock: 25 minutes**
-Present your results from **Group Activities** and answer any questions your classmates may have.
+/* Give name and boxOffice of all movies with boxOffice over 500. Get rid of _id */
+db.comedy.find({"merits.boxOffice": {$gt:500}}, {name:true, "merits.boxOffice":true, _id: false})
+
+/* A quoted number is a string, and is not the same as the actual number */
+db.comedy.find({year:2012})
+/* is totally different from */
+db.comedy.find({year: '2012'})
+
+/* Use $ne for "not equals" */
+db.comedy.find({year: {$ne: 2011}})
+
+/* The $in operator is analogous to the SQL IN modifier, 
+allowing you to specify an array of possible matches. */
+db.comedy.find({year: {$in: [2010,2011,2012]}});
+
+/* Find all comedies with a budget of 50, 60, 70 or 80 */
+db.comedy.find({"merits.budget": {$in: [50, 60, 70, 80]}})
+
+/* The $nin operator is similar to $in except that it selects objects for which 
+the specified field does not have any value in the specified array. */
+db.comedy.find({year: {$nin: [2010,2011,2012]}});
+
+/* Find all comedies that have a runningTime other than 100 or 105 */
+db.comedy.find({"technical.runningTime": {$nin: [100, 105]}})
+
+/* The $or operator lets you use boolean or in a query. 
+You give $or an array of expressions, any of which can satisfy the query. */
+/* The $or operator retrieves matches for each or clause individually and 
+eliminates duplicates when returning results. */
+db.comedy.find({$or: [{year: 2012}, {name: 'The Hangover'}]});
+
+/* Find all comedies with the name Ted or The Hangover from the year 2012 */
+db.comedy.find({year: 2012, $or: [{name: 'Ted'}, {name: 'The Hangover'}]});
+
+/* Find all comedies with a boxOffice over 500 from the year 2010 or 2011 */
+db.comedy.find({"merits.boxOffice": {$gt: 500}, $or: [{year:2010},{year: 2011}]})
+
+/* The $nor operator lets you use a boolean or expression to do queries. 
+You give $nor a list of expressions, none of which can satisfy the query. */
+/* Find all comedies except for Ted or The Hangover */
+db.comedy.find({$nor: [{name: 'Ted'}, {name: 'The Hangover'}]});
+
+/* Find all comedies not released in the years 2010 or 2011 */
+db.comedy.find({$nor: [{year: 2010}, {year: 2011}]});
+
+/* The $and operator lets you use boolean and in a query. 
+You give $and an array of expressions, all of which must match to satisfy the query. */
+db.comedy.find({$and:[{year: {$gt: 2010}}, {year:{$lt: 2012}}]})
+
+/* Find all movies for which the boxOffice exceeded over 500 million dollar and the budget was lower than or equal to 50 million dollar */
+db.comedy.find({$and:[{"merits.boxOffice": {$gt: 500}}, {"merits.budget":{$lte: 50}}]})
+
+/* You can also query an array */
+db.comedy.find({cast:'Bradley Cooper'})
+
+/* When the key is an array, you can look for an object inside the array */
+db.comedy.find({'comments.by':'Steve'})
+
+/* Find all movies that have comments by Rob or Alex */
+db.comedy.find({$or:[{'comments.by':'Rob'}, {'comments.by':'Alex'}]})
+
+/* The $size operator matches any array with the specified number of elements. */
+db.comedy.find({comments: {$size:2}})
+
+/* Find all movies with 4 actors */
+db.comedy.find({cast: {$size:4}})
+
+/* You cannot use $size to find a range of sizes (for example: arrays with more than 1 element). 
+If you need to query for a range, create an extra size field that you increment when you add elements. */
+
+/* You can even use regular expressions in your queries */
+/* i means it's case-insensitive */
+db.comedy.find({name:{$regex: /bill|ted/i}})
+
+/* An example with a syntax a bit shorter */
+db.comedy.find({name: /The hangover.*/i})
+
+/* Another way of writing the same */
+db.comedy.find({name: {$regex: 'The hangover.*', $options: 'i'}})
+
+/* Find all movies for which the comments contain the word love */
+db.comedy.find({"comments.text": /.*love.*/i})
+
+/* If you wish to specify both a regex and another operator for the same field, 
+you need to use the $regex clause.  */
+db.comedy.find({name: {$regex: /The hangover.*/i, $nin: ['The Hangover Part II']}});
+
+/* The $not meta operator can be used to negate the check performed by a standard operator. */
+db.comedy.find({name: {$not: /The hangover.*/i}});
+
+/* Find all movies for which the comments do not contain the word like */
+db.comedy.find({"comments.text": {$not: /.*like.*/i}})
+
+/* The following doesn't work! --> "errmsg" : "$not needs a regex or a document" */
+db.comedy.find({year: {$not: 2012}});
+
+/* Find all comedies that were not released in 2012 */
+db.comedy.find({year: {$ne: 2012}})
+
+/* MongoDB queries support JavaScript expressions! */
+db.comedy.find( { $where: 'this.year > 2009 && this.name !== "Ted"' })
+
+/* Try to retrieve the same result as in the previous query, but not using JavaScript */
+db.comedy.find({year: {$gt: 2009},  name: {$ne: 'Ted'}})
+
+/* Note that the flexibility of JavaScript expressions comes at a price
+It is slower than native MongoDB operators. */
+
+/* MongoDB has another operator called $where. Using which you can perform SQL's WHERE-like operations. */
+db.comedy.find({$where: 'this.year > 2011'})
+
+/* Find all comedies that were released in 2011 or later with Ed Helms as part of the cast */
+db.comedy.find({cast:'Ed Helms', $where: 'this.year >= 2011'})
+
+/* Find all movies that were commented by Steve and have a budget of 50 million dollar or more */
+db.comedy.find({"comments.by":'Steve', $where: 'this.merits.budget >= 50'})
+
+/* Find all movies with 3 comments or more */ 
+db.comedy.find({$where: 'this.comments.length >= 2'}) //THIS YOU CANT DO WITH STANDARD MONGO
+
+/* Again, like JavaScript expressions $where is slower than native operators. 
+Use JavaScript expressions and $where ONLY when you can't accomplish the query using native operators. */
+
+/* The $all operator is similar to $in, 
+but instead of matching any value in the specified array all values in the array must be matched. */
+/* An array can have more elements than those specified by the $all criteria. 
+$all specifies a minimum set of elements that must be matched. */
+db.comedy.find ({'cast': {$all: ['Bradley Cooper', 'Ed Helms']}})
+db.comedy.find ({'cast': {$all: ['Bradley Cooper', 'Mila Kunis']}})
+
+/* Find all movies commented by Anne and Robin */
+db.comedy.find ({'comments.by': {$all: ['Anne', 'Robin']}})
+
+/* $exists checks for existence (or lack thereof) of a field. */
+db.comedy.find ({tagline: {$exists : true}})
+db.comedy.find ({'merits.boxOffice': {$exists : true}})
+
+/* Find all movies that have a sequel */
+db.comedy.find({sequel: {$exists: true}})
+
+/* Find all movies that have a sequel of the Hangover */
+db.comedy.find({sequel: {$exists: true, $regex: /.*hangover.*/i}})
+
+/* Find all movies which have a field prizes and which won more than 10 prizes */
+db.comedy.find({"technical.prizes": {$exists: true, $gt:10}})
+
+
+/* In the mongo shell, the primary method for the read operation is the db.collection.find() method. 
+This method queries a collection and returns a cursor to the returning documents.
+To access the documents, you need to iterate the cursor. 
+However, in the mongo shell, if the returned cursor is not assigned 
+to a variable using the var keyword, then the cursor is automatically 
+iterated up to 20 times to print up to the first 20 documents in the results.
+When you assign the cursor returned from the find() method 
+to a variable using the var keyword, the cursor does not automatically iterate. */
+var myCursor = db.comedy.find({year: {$gt: 2010}})
+
+/* You can call the cursor variable in the shell to iterate up to 20 times
+– if there are 20 documents – and print the matching documents */
+myCursor
+
+/* You can also use the cursor method next() to access the documents */
+var myCursor = db.comedy.find({year: {$gt: 2010}})
+while (myCursor.hasNext()) {
+   print(tojson(myCursor.next()));
+}
+
+/* As an alternative print operation, consider the printjson() helper method to replace print(tojson()) */
+var myCursor = db.comedy.find({year: {$gt: 2010}})
+while (myCursor.hasNext()) {
+   printjson (myCursor.next());
+}
+
+/* You can use the cursor method forEach() to iterate the cursor and access the documents */
+var myCursor = db.comedy.find({year: {$gt: 2010}})
+myCursor.forEach(printjson)
+
+/* You can use the toArray() method to iterate the cursor and return the documents in an array */
+var myCursor = db.comedy.find({year: {$gt: 2010}})
+var documentArray = myCursor.toArray()
+var myDocument = documentArray[1]
+print (myDocument)
+
+/* The toArray() method loads into RAM all documents returned by the cursor; 
+the toArray() method exhausts the cursor. */
+
+/* Try to get the following result */
+/* 
+Ted --> Mark Walhlberg,Mila Kunis,Seth MacFarlane
+We're the Millers --> Jennifer Aniston,Luis Guzmán,Ed Helms,Kathryn Hahn
+The Hangover --> Bradley Cooper,Ed Helms,Zach Galifianakis
+The Hangover Part II --> Bradley Cooper,Ed Helms,Zach Galifianakis
+*/
+var myCursor = db.comedy.find({}, {cast: true, name:true})
+myCursor.forEach(x=> print(`${x.name} --> ${x.cast}`))
+
+
+/* Any good database system should have a count() method 
+which returns the number of records that will be returned for a query. 
+MongoDB too has a count() method which you can call on a collection to get the count of the results. */
+
+/* This will return the total number of documents in the collection comedy */
+db.comedy.count()
+
+/* This will return the total number movies with the value of year more than 2009 */
+db.comedy.count({year: {$gt:2009}})
+
+/* Find the number of movies witch are commented by Steve */
+db.comedy.count({"comments.by": "Steve"})
+
+/* To limit the collection to just two */
+db.comedy.find().limit(2)
+
+/* The skip() expression allows one to specify at which object 
+the database should begin returning results. */
+db.comedy.find().skip(1).limit(2)
+
+/* In the shell, a limit of 0 is equivalent to setting no limit at all. */
+
+/* sort() is analogous to the ORDER BY statement in SQL - 
+it requests that items be returned in a particular order. 
+You can pass sort() a key pattern which indicates the desired order for the result. */
+db.comedy.find().sort({name : 1})
+
+/* Sort the movies chronologically */
+db.comedy.find().sort({year: 1})
+
+/* Sort the movies reverse chronologically */
+db.comedy.find().sort({year: -1})
+
+/* Use indexes in MongoDB */
+/* The following operation creates an ascending index on the year field */
+db.comedy.createIndex( { year: 1 } )
+
+
+/* Update data in MongoDB */
+/* Suppose you would want to add a new field to the movie Ted. 
+What comes to your mind instantly might look something like this (do not execute this!) */
+db.comedy.update({name:'Ted'}, {director:'Seth MacFarlane'})  //BAD BAD BAD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+/* HOLD IT! That's about to do something disastrous. 
+It will overwrite the whole document with {director:'Seth MacFarlane'}, 
+instead of updating it by appending a new field.
+The right way to do is: */
+db.comedy.update({name:'Ted'}, {'$set':{director:'Seth MacFarlane'}})   // $set is very IMPORTANT !!!!!!!!!!!!!
+
+/* The above command will reorder the fields, but worry not, the data is safe and intact.
+The db.collection.update() method modifies existing documents in a collection. 
+The db.collection.update() method can accept query criteria to determine which documents to update.
+By default, the db.collection.update() method updates a single document.
+Operations performed by an update are atomic within a single document. */
+
+/* With the multi option, update() can update all documents in a collection that match a query. 
+Otherwise the update method will affect only 1 document. Which document will be affected, is undefined. */
+db.comedy.update({name: /The hangover.*/i}, {'$set': {director:'Todd Phillips'}}, {multi: true})
+
+/* Add a new field voiceOver: 'Patrick Stewart' to both Ted movies */
+db.comedy.update({name:/ted.*/i}, {'$set':{voiceOver:'Patrick Stewart'}}, {multi:true})
+
+/* If the update() method includes upsert: true and no documents match the query portion 
+of the update operation, then the update operation creates a new document. 
+If there are matching documents, then the update operation with the upsert: true 
+modifies the matching document or documents.
+By specifying upsert: true, applications can indicate, in a single operation, 
+that if no matching documents are found for the update, an insert should be performed. */
+db.comedy.update({name: 'The Hangover Part III'}, {'$set': {year: 2013}}, {upsert: true})
+
+/* If you want to update at most a single document that match a specified filter 
+even though multiple documents may match the specified filter. New in version 3.2 */
+db.comedy.updateOne({name: /The hangover.*/i}, {'$set': {distributedBy:'Warner Bros Pictures'}})
+
+/* If you want to update all documents that match a specified filter. New in version 3.2 */
+db.comedy.updateMany({name: /The hangover.*/i}, {'$set': {distributedBy:'Warner Bros Pictures'}})
+
+/* Update all Ted documents so the distribution company is Universal Pictures */
+db.comedy.updateMany({name: /ted.*/i}, {'$set': {distributedBy:'Universal Pictures'}})
+
+/* Write operations – if they affect multiple documents – are not isolated transactions, 
+instead they can affect a few documents, then yield and allow other readers 
+or writers to operate and then pick up again to affect some more documents. 
+However, an individual document manipulation is always atomic with respect to any concurrent readers or writers. 
+So no reader or writer in the system will see the document half updated. */
+
+/* How do you update a value which is an array? */
+db.comedy.update({name: 'Ted'}, {$push: {cast: 'Joel McHale'}})
+
+/* Add the actor 'Giovanni Ribisi' to the cast of Ted */
+db.comedy.update({name: 'Ted'}, {$push: {cast: 'Giovanni Ribisi'}})
+
+/* If you need to remove something from the cast array, you can do it this way */
+db.comedy.update({name: 'Ted'}, {$pull: {cast: 'Giovanni Ribisi'}})
+
+/* You can also use $pop to remove the first element */
+db.comedy.update({name: 'Ted'}, {$pop: {cast: -1}})
+
+/* You can also use $pop to remove the last element */
+db.comedy.update({name: 'Ted'}, {$pop: {cast: 1}})
+
+/* How can you delete a field from a document? */
+db.comedy.update({name:'Ted'}, {$unset: {cast: 1}})
+
+/* Remove the voiceOver field from both Ted movies */
+db.comedy.updateMany({name:/ted.*/i}, {$unset: {voiceOver: 1}})
+
+/* In case you want to delete a field from all the documents of a collection */
+/* The false parameter is for upsert option, true is for multiple option. 
+We set multiple option to true because we want to delete them all from the collection. */
+db.comedy.update({},{$unset: {cast:1}}, false, true)
+
+/* How can you delete a document from a collection? */
+db.comedy.remove({name: /Ted*/i})
+/* The above command deletes a single document OR ALL DOCUMENTS that match a specified filter. */
+
+/* If you want to delete at most a single document that match a specified filter 
+even though multiple documents may match the specified filter. New in version 3.2*/
+db.comedy.deleteOne({name: /The Hangover*/i})
+
+/* If you want to delete all documents that match a specified filter. New in version 3.2 */
+db.comedy.deleteMany({name: /The Hangover*/i})
+
+/* How do you empty a collection of its documents? */
+db.comedy.remove({})
+/* Note, the above command does not delete the collection, 
+it just empties the collection like the SQL truncate command. */
+
+/* How do you drop a collection? */
+db.comedy.drop()
+
+/* How do you drop a database? */
+use movies
+db.dropDatabase()
+
+
+
+
  
  
