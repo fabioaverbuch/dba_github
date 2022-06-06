@@ -1,0 +1,26 @@
+ 
+Database User Roles
+read – Read data on all non-system collections
+readWrite – Include all ‘read’ role privileges and the ability to write data on all non-system collections
+
+Database Administration Roles
+dbAdmin – Grant privileges to perform administrative tasks
+userAdmin – Allows you to create and modify users and roles on the current database
+dbOwner – This role combines the following: readWrite dbAdmin userAdmin
+
+All-Database Roles
+readAnyDatabase – The same as ‘read’ role but applies to all databases
+readWriteAnyDatabase – The same as ‘readWrite’ role but applies to all databases
+userAdminAnyDatabase – The same as ‘userAdmin’ role but applies to all databases
+dbAdminAnyDatabase – The same as ‘dbAdmin’ role but applies to all databases
+
+Cluster Administration Roles
+clusterMonitor – Provides read-only access to monitoring tools
+clusterManager – For management and monitoring actions on the cluster
+hostManager – To monitor and manage servers
+clusterAdmin – Combines the other three roles plus dropDatabase action
+
+Backup and Restoration Roles
+backup – Provides the privileges needed for backing up data
+restore – Provides the privileges needed to restore data from backups
+
