@@ -1,10 +1,5 @@
 use exercices
 
-/* Select the following command and press Ctrl + Enter or click F9 (to execute the selected command) */
-/* The command saves some data to the database. 
-/* Afterwards the new database "movies" will be created */
-/* In the process a new collection called "comedy" will also be created in the database. */
-
 db.comedy.insert({name: 'Ted', year: 2012, tagline: 'Ted is coming',
     cast: ['Mark Walhlberg', 'Mila Kunis', 'Seth MacFarlane'],
     technical: {runningTime: 106, language: 'English', prizes: 13, nominations: 27},
@@ -12,9 +7,12 @@ db.comedy.insert({name: 'Ted', year: 2012, tagline: 'Ted is coming',
     merits: {budget: 50, boxOffice: 535},
     comments:[{by:'Steve', text:'Loved the movie'}, {by:'Dave', text:'Really funny!'}]})
 
-/* Right click on Collections at the left. Choose Refresh All */
-/* Right click on movies > Collections > comedy at the left. Choose Open Collection Tab => a new tab is opened. Take a look at it */
-/* There are multiple View Modes. You can change the View Mode using the buttons at the upper right. The default mode is Table View */
+db.comedy.insert({name: 'Ted 2', year: 2015, tagline: 'Ted is coming again',
+    cast: ['Mark Walhlberg', 'Seth MacFarlane', 'Amanda Seyfried', 'Morgan Freeman'],
+    technical: {runningTime: 115, language: 'English'}, 
+    sequel: 'Ted 2',
+    merits: {budget: 85},
+    comments:[{by:'Anne', text:'Funny'}, {by:'Kate', text:'I still love Ted'}, {by:'Leo', text:'Nice movie'}]})
 
 /* New in version 3.2: insertOne: inserts a single document into a collection */    
 db.comedy.insertOne({name: 'We\'re the Millers', year: 2013, tagline: 'If anyone asks',
@@ -38,33 +36,15 @@ db.comedy.insertMany([{name: 'The Hangover', year: 2009, tagline: 'Some guys jus
     merits: {budget: 80, boxOffice: 581},
     comments:[{by:'Anne', text:'Liked the first part better'}, {by:'Robin', text:'Over the top'}]}])
 
-/* Insert a new comedy
-    - name: 'Ted 2'
-    - year: 2015
-    - tagline: 'Ted is coming, again' 
-    - cast: ['Mark Walhlberg', 'Seth MacFarlane', 'Amanda Seyfried', 'Morgan Freeman']
-    - technical: {runningTime: 115, language: 'English'},   
-    - merits: {budget: 85} 
-    - comments:[{by:'Anne', text:'Funny'}, {by:'Kate', text:'I still love Ted'}, {by:'Leo', text:'Nice movie'}]
-    */
-db.comedy.insert({name: 'Ted 2', year: 2015, tagline: 'Ted is coming again',
-    cast: ['Mark Walhlberg', 'Seth MacFarlane', 'Amanda Seyfried', 'Morgan Freeman'],
-    technical: {runningTime: 115, language: 'English'}, 
-    sequel: 'Ted 2',
-    merits: {budget: 85},
-    comments:[{by:'Anne', text:'Funny'}, {by:'Kate', text:'I still love Ted'}, {by:'Leo', text:'Nice movie'}]})
-
 
 
 /* To read all data from a collection */
 db.comedy.find()
 
 /* Conditional operators */
-/* How do you do an 'equal to' query? Just match the value for the queried key */
 db.comedy.find({year: 2012})
-
-/* Find all movies released in the year 2013 */
-
+db.comedy.find({year: {$lt: 2012}})
+db.comedy.find({year: {$gt: 2010}})
 
 /* Use these special forms for greater than and less than comparisons in queries, 
 since they have to be represented in the query document:
@@ -72,12 +52,6 @@ since they have to be represented in the query document:
     - db.collection.find({ "field" : { $lt: value } } );   // less than  :  field < value
     - db.collection.find({ "field" : { $gte: value } } );  // greater than or equal to : field >= value 
     - db.collection.find({ "field" : { $lte: value } } );  // less than or equal to : field <= value
-*/
-db.comedy.find({year: {$lt: 2012}})
-db.comedy.find({year: {$gt: 2010}})
-
-/* Find all movies from the year 2011 until now */
-
 
 /* To search an object inside an object, just use the regular JavaScript dot notation 
    of the target object as the key and quote it. The '' around 'merits.budget' are mandatory */

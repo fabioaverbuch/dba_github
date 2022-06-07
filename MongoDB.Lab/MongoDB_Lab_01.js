@@ -12,6 +12,10 @@ db.irons.insert({ model: 'GC1433/40', price: 23, brand: 'Philips', type: 'Steam 
 
 db.irons.find()
 
+db.irons.find({},{ model: 1, price: 1, brand: 1 }).sort({ price: -1 })
+
+db.irons.find({},{ model: 1, price: 1, brand: 1 }).sort({ price: -1 }).limit(1)
+
 
 // 1 Give all irons of the brand Philips or Tefal that cost 30 euros or less, that are red, have a power of 2000 or
 // more and have a cord storage space and spray function.
