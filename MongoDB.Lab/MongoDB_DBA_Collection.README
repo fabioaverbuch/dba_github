@@ -1,0 +1,17 @@
+db.getCollectionNames()
+
+db.collectionName.drop() 
+
+db.collectionName.renameCollection(NewcollectionName)
+
+db.collectionName.find()
+
+db.collectionName.createIndex({FieldName1: 1, FieldName2: 1 ..})
+
+db.collectionName.dropIndex(indexName)
+
+db.collectionName.getIndexes()
+
+db.collectionName.reIndex()
+
+db.runCommand({compact : collectionName}) 

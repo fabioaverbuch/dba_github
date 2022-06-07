@@ -1,1 +1,40 @@
- 
+-- Retrive & Set parameters --
+db.adminCommand({getParameter : '*'})
+db.adminCommand({getParameter: 1, 'saslHostName': 1})
+db.adminCommand({setParameter: 1, 'saslHostName': <value> } )
+
+-- show connection status --
+db.serverStatus().connections
+
+-- List Session --
+use config
+db.system.sessions.aggregate([{$listSessions: {allUsers:true}}])
+db.system.sessions.aggregate([{$listSessions: {users:[{user: userName, db: dbName}]}}])
+
+-- Drop connection --
+db.adminCommand({"dropConnections" : 1,"hostAndPort" : ["oldhost.example.com:27017"]})
+
+-- Kill Operation --
+db.adminCommand({'killOp': 1, 'op': opID})
+
+-- Shutdown server --
+db.shutdownServer()
+db.adminCommand({'shutdown': 1})
+db.adminCommand({'shutdown': 1, 'force': true})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
