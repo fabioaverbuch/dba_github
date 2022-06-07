@@ -36,6 +36,9 @@ db.comedy.insertMany([{name: 'The Hangover', year: 2009, tagline: 'Some guys jus
     merits: {budget: 80, boxOffice: 581},
     comments:[{by:'Anne', text:'Liked the first part better'}, {by:'Robin', text:'Over the top'}]}])
 
+/* Remove a field of collection */
+db.products.updateMany({}, {$unset: {comments: ""}})
+
 
 
 /* To read all data from a collection */
@@ -102,6 +105,7 @@ db.comedy.find({year: {$in: [2010,2011,2012]}});
 
 /* Find all comedies with a budget of 50, 60, 70 or 80 */
 db.comedy.find({"merits.budget": {$in: [50, 60, 70, 80]}})
+db.comedy.find({"merits.budget": {$in: [50, 60, 70, 80]}},{ name: 1, year: 1, tagline: 1, merits: 1 })
 
 /* The $nin operator is similar to $in except that it selects objects for which 
 the specified field does not have any value in the specified array. */
@@ -116,8 +120,9 @@ You give $or an array of expressions, any of which can satisfy the query. */
 eliminates duplicates when returning results. */
 db.comedy.find({$or: [{year: 2012}, {name: 'The Hangover'}]});
 
-/* Find all comedies with the name Ted or The Hangover from the year 2012 */
-db.comedy.find({year: 2012, $or: [{name: 'Ted'}, {name: 'The Hangover'}]});
+/* Find all comedies with the name Ted or The Hangover from the year greater 2005 */
+db.comedy.find({year: {$gt: 2005}, $or: [{name: 'Ted'}, {name: 'The Hangover'}]});
+db.comedy.find({year: {$gt: 2005},$or: [{name: 'Ted'}, {name: 'The Hangover'}]},{ name: 1, year: 1, tagline: 1 });
 
 /* Find all comedies with a boxOffice over 500 from the year 2010 or 2011 */
 db.comedy.find({"merits.boxOffice": {$gt: 500}, $or: [{year:2010},{year: 2011}]})
@@ -125,10 +130,10 @@ db.comedy.find({"merits.boxOffice": {$gt: 500}, $or: [{year:2010},{year: 2011}]}
 /* The $nor operator lets you use a boolean or expression to do queries. 
 You give $nor a list of expressions, none of which can satisfy the query. */
 /* Find all comedies except for Ted or The Hangover */
-db.comedy.find({$nor: [{name: 'Ted'}, {name: 'The Hangover'}]});
+db.comedy.find({$nor: [{name: 'Ted'}, {name: 'The Hangover'}]},{ name: 1, year: 1, tagline: 1 });
 
 /* Find all comedies not released in the years 2010 or 2011 */
-db.comedy.find({$nor: [{year: 2010}, {year: 2011}]});
+db.comedy.find({$nor: [{year: 2010}, {year: 2011}]},{ name: 1, year: 1, tagline: 1 });
 
 /* The $and operator lets you use boolean and in a query. 
 You give $and an array of expressions, all of which must match to satisfy the query. */
