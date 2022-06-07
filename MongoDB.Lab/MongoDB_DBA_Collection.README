@@ -6,6 +6,10 @@ db.collectionName.drop()
 
 db.collectionName.renameCollection(NewcollectionName)
 
+db.runCommand({count: collectionName})
+
+db.runCommand ({distinct: collectionName, key: FieldName})
+
 db.collectionName.find()
 
 db.collectionName.find().limit(NUMBER)

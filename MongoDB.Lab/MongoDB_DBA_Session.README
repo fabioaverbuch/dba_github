@@ -1,0 +1,30 @@
+db.serverStatus().connections
+
+use config
+db.system.sessions.aggregate([{$listSessions: {allUsers:true}}])
+db.system.sessions.aggregate([{$listSessions: {users:[{user: userName, db: dbName}]}}])
+
+db.runCommand({endSessions: [{id:UUID}])
+db.runCommand({killAllSessions:[]})
+db.runCommand({killAllSessions:[{ user: userName, db: dbName}]})
+
+db.shutdownServer()
+db.adminCommand({'shutdown': 1})
+db.adminCommand({'shutdown': 1, 'force': true})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

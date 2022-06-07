@@ -1,4 +1,4 @@
- 
+
 Database User Roles
 read – Read data on all non-system collections
 readWrite – Include all ‘read’ role privileges and the ability to write data on all non-system collections
