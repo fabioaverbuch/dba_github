@@ -34,6 +34,8 @@ db.changeUserPassword('dbadmin', 'm3dus4$1')
 
 db.dropUser('dbadmin')
 
+db.getRole('userAdminAnyDatabase',{showPrivileges: true }) 
+
 db.grantRolesToUser('dbadmin',[{role:'readWrite', db :'admin'}])
 
 db.revokeRolesFromUser('dbadmin',[{role:'readWrite', db:'admin'}])
