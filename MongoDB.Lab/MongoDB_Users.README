@@ -28,10 +28,14 @@ db.getUsers()
 
 db.createUser({	user: 'dbadmin',pwd: 'm3dus4$',roles:[{role:'userAdminAnyDatabase', db:'admin'}]})
 
+db.auth('dbadmin', 'm3dus4$')
+
 db.changeUserPassword('dbadmin', 'm3dus4$1')
 
 db.dropUser('dbadmin')
 
-db.updateUser( 'dbadmin',{roles:[{role :'userAdminAnyDatabase, db :'admin'},{role :'readWrite', db :'admin'}]})
+db.grantRolesToUser('dbadmin',[{role:'readWrite', db :'admin'}])
+
+db.revokeRolesFromUser('dbadmin',[{role:'readWrite', db:'admin'}])
 
 
