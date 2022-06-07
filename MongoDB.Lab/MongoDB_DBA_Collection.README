@@ -1,3 +1,5 @@
+db.dropDatabase(dbName)
+
 db.getCollectionNames()
 
 db.collectionName.drop() 
@@ -5,6 +7,10 @@ db.collectionName.drop()
 db.collectionName.renameCollection(NewcollectionName)
 
 db.collectionName.find()
+
+db.collectionName.find().limit(NUMBER)
+
+db.collectionName.find().sort({KEY:1})
 
 db.collectionName.createIndex({FieldName1: 1, FieldName2: 1 ..})
 

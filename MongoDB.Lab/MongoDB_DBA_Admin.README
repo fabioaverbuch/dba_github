@@ -3,6 +3,10 @@ db.adminCommand({getParameter : '*'})
 db.adminCommand({getParameter: 1, 'saslHostName': 1})
 db.adminCommand({setParameter: 1, 'saslHostName': <value> } )
 
+-- Backup & Restore --
+mongodump
+mongorestore
+
 -- show connection status --
 db.serverStatus().connections
 
