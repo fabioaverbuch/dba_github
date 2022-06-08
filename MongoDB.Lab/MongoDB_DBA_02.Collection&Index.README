@@ -4,6 +4,8 @@ db.getCollectionNames()
 
 db.collectionName.drop() 
 
+Object.keys(db.irons.findOne())
+
 db.collectionName.renameCollection(NewcollectionName)
 
 db.runCommand({count: collectionName})
@@ -16,7 +18,7 @@ db.collectionName.find().limit(NUMBER)
 
 db.collectionName.find().sort({KEY:1})
 
-db.collectionName.createIndex({fieldName1: 1, fieldName2: 1 ..},{name: indexName})
+db.collectionName.createIndex({fieldName1: 1/-1, fieldName2: 1/-1 ..},{name: indexName},{unique: true })
 
 db.collectionName.dropIndex(indexName)
 

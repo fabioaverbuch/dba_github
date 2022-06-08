@@ -1,11 +1,4 @@
-db.adminCommand({hostInfo:1})
-
-db.adminCommand({lockInfo:1})
-
 db.adminCommand({top:1})
-
-db.adminCommand({getLog:'global'})
-
 
 db.runCommand({serverStatus:1})
 
