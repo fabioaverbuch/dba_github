@@ -8,6 +8,14 @@ db.irons.insert({ model: 'FV3730', price: 30, brand: 'Tefal', type: 'Steam iron'
 
 db.irons.insert({ model: 'GC1433/40', price: 23, brand: 'Philips', type: 'Steam iron', description: { color: 'red/white', waterreservoir: 0.220 }, extras: ['anti-calc system', 'cord storage space', 'drop stop', 'spray function'], technically: { power: 2000, weight: 1.1, steampressure: 25 }, measures: { width: 29, height: 15, depth: 13, cordlength: 195 }, reviews: { plus: ['good quality'], minus: ['fragile', 'average quality', 'not easy to use'] } })
 
+db.peaks.insertMany([
+{"name": "Everest","height": 8848,"location": ["Nepal", "China"],"ascents": {"first": {"year": 1953},"first_winter": {"year": 1980},"total": 5656}},
+{"name": "K2","height": 8611,"location": ["Pakistan", "China"],"ascents": {"first": {"year": 1954},"first_winter": {"year": 1921},"total": 306}},
+{"name": "Kangchenjunga","height": 8586,"location": ["Nepal", "India"],"ascents": {"first": {"year": 1955},"first_winter": {"year": 1986},"total": 283}},
+{"name": "Lhotse","height": 8516,"location": ["Nepal", "China"],"ascents": {"first": {"year": 1956},"first_winter": {"year": 1988},"total": 461}},
+{"name": "Makalu","height": 8485,"location": ["China", "Nepal"],"ascents": {"first": {"year": 1955},"first_winter": {"year": 2009},"total": 361}}
+])
+
 db.irons.find()
 
 db.irons.find({},{ model: 1, price: 1, brand: 1 }).sort({ price: -1 })
