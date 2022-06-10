@@ -1,0 +1,88 @@
+System: System resources on the server. They include CPU usage, memory usage, disk usage, network bandwidth, read/write requests, Input/Output wait statistics, average read/write time, etc.
+
+Query throughput: A workload of the database that can be measured as the number of queries per second. With this metric, you can analyze how your server performs and processes queries over time, 
+as well as track the performance of specific statements (SELECT, INSERT, UPDATE, and DELETE).
+
+Connections: The number of open connections running simultaneously that may overload the server and slow down the performance.
+
+Threads: The number of clients currently connected.
+
+Response time: An average response time per query or for all queries in the database server you are connected to.
+
+Latency: The duration of queries or operations.
+
+Errors: The number of code errors that happen most frequently and cause failures.
+
+Queries: The number of statements most frequently executed by the server, including stored procedures.
+
+Buffer pool usage: Memory usage on the server. As a rule, it is used to investigate performance issues. 
+
+
+Server status variables
+> SHOW GLOBAL STATUS;
+
+Slow query logs
+> show global variables like 'slow%log%';
+> SHOW [FULL] PROCESSLIST;
+
+Performance Schema
+> SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'performance_schema';
+
+
+sys Schema Views
+host_summary, x$host_summary 	Statement activity, file I/O, and connections, grouped by host 	
+host_summary_by_file_io, x$host_summary_by_file_io 	File I/O, grouped by host 	
+host_summary_by_file_io_type, x$host_summary_by_file_io_type 	File I/O, grouped by host and event type 	
+host_summary_by_stages, x$host_summary_by_stages 	Statement stages, grouped by host 	
+host_summary_by_statement_latency, x$host_summary_by_statement_latency 	Statement statistics, grouped by host 	
+host_summary_by_statement_type, x$host_summary_by_statement_type 	Statements executed, grouped by host and statement 	
+innodb_buffer_stats_by_schema, x$innodb_buffer_stats_by_schema 	InnoDB buffer information, grouped by schema 	
+innodb_buffer_stats_by_table, x$innodb_buffer_stats_by_table 	InnoDB buffer information, grouped by schema and table 	
+innodb_lock_waits, x$innodb_lock_waits 	InnoDB lock information 	
+io_by_thread_by_latency, x$io_by_thread_by_latency 	I/O consumers, grouped by thread 	
+io_global_by_file_by_bytes, x$io_global_by_file_by_bytes 	Global I/O consumers, grouped by file and bytes 	
+io_global_by_file_by_latency, x$io_global_by_file_by_latency 	Global I/O consumers, grouped by file and latency 	
+io_global_by_wait_by_bytes, x$io_global_by_wait_by_bytes 	Global I/O consumers, grouped by bytes 	
+io_global_by_wait_by_latency, x$io_global_by_wait_by_latency 	Global I/O consumers, grouped by latency 	
+latest_file_io, x$latest_file_io 	Most recent I/O, grouped by file and thread 	
+memory_by_host_by_current_bytes, x$memory_by_host_by_current_bytes 	Memory use, grouped by host 	
+memory_by_thread_by_current_bytes, x$memory_by_thread_by_current_bytes 	Memory use, grouped by thread 	
+memory_by_user_by_current_bytes, x$memory_by_user_by_current_bytes 	Memory use, grouped by user 	
+memory_global_by_current_bytes, x$memory_global_by_current_bytes 	Memory use, grouped by allocation type 
+memory_global_total, x$memory_global_total 	Total memory use 	
+metrics 	Server metrics 	
+processlist, x$processlist 	Processlist information 	
+ps_check_lost_instrumentation 	Variables that have lost instruments 	
+schema_auto_increment_columns 	AUTO_INCREMENT column information 	
+schema_index_statistics, x$schema_index_statistics 	Index statistics 	
+schema_object_overview 	Types of objects within each schema 	
+schema_redundant_indexes 	Duplicate or redundant indexes 	
+schema_table_lock_waits, x$schema_table_lock_waits 	Sessions waiting for metadata locks 	
+schema_table_statistics, x$schema_table_statistics 	Table statistics 	
+schema_table_statistics_with_buffer, x$schema_table_statistics_with_buffer 	Table statistics, including InnoDB buffer pool statistics 	
+schema_tables_with_full_table_scans, x$schema_tables_with_full_table_scans 	Tables being accessed with full scans 	
+schema_unused_indexes 	Indexes not in active use 	
+session, x$session 	Processlist information for user sessions 	
+session_ssl_status 	Connection SSL information 	
+statement_analysis, x$statement_analysis 	Statement aggregate statistics 	
+statements_with_errors_or_warnings, x$statements_with_errors_or_warnings 	Statements that have produced errors or warnings 	
+statements_with_full_table_scans, x$statements_with_full_table_scans 	Statements that have done full table scans 	
+statements_with_runtimes_in_95th_percentile, x$statements_with_runtimes_in_95th_percentile 	Statements with highest average runtime 	
+statements_with_sorting, x$statements_with_sorting 	Statements that performed sorts 	
+statements_with_temp_tables, x$statements_with_temp_tables 	Statements that used temporary tables 	
+user_summary, x$user_summary 	User statement and connection activity 	
+user_summary_by_file_io, x$user_summary_by_file_io 	File I/O, grouped by user 	
+user_summary_by_file_io_type, x$user_summary_by_file_io_type 	File I/O, grouped by user and event 	
+user_summary_by_stages, x$user_summary_by_stages 	Stage events, grouped by user 	
+user_summary_by_statement_latency, x$user_summary_by_statement_latency 	Statement statistics, grouped by user 	
+user_summary_by_statement_type, x$user_summary_by_statement_type 	Statements executed, grouped by user and statement 	
+version 	Current sys schema and MySQL server versions 	5.7.28
+wait_classes_global_by_avg_latency, x$wait_classes_global_by_avg_latency 	Wait class average latency, grouped by event class 	
+wait_classes_global_by_latency, x$wait_classes_global_by_latency 	Wait class total latency, grouped by event class 	
+waits_by_host_by_latency, x$waits_by_host_by_latency 	Wait events, grouped by host and event 	
+waits_by_user_by_latency, x$waits_by_user_by_latency 	Wait events, grouped by user and event 	
+waits_global_by_latency, x$waits_global_by_latency 	Wait events, grouped by event 	
+x$ps_digest_95th_percentile_by_avg_us 	Helper view for 95th-percentile views 	
+x$ps_digest_avg_latency_distribution 	Helper view for 95th-percentile views 	
+x$ps_schema_table_statistics_io 	Helper view for table-statistics views 	
+x$schema_flattened_keys 	Helper view for schema_redundant_indexes 	
