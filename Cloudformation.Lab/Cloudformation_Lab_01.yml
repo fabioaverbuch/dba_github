@@ -11,7 +11,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref PubPrivateVPC
-      AvailabilityZone: us-east-1a
+      AvailabilityZone: us-east-2a
       CidrBlock: 10.0.1.0/24
       MapPublicIpOnLaunch: true
      
@@ -19,7 +19,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref PubPrivateVPC
-      AvailabilityZone: us-east-1b
+      AvailabilityZone: us-east-2b
       CidrBlock: 10.0.2.0/24
       MapPublicIpOnLaunch: true
      
@@ -27,7 +27,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref PubPrivateVPC
-      AvailabilityZone: us-east-1a
+      AvailabilityZone: us-east-2a
       CidrBlock: 10.0.3.0/24
       MapPublicIpOnLaunch: false
      
@@ -35,7 +35,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref PubPrivateVPC
-      AvailabilityZone: us-east-1b
+      AvailabilityZone: us-east-2b
       CidrBlock: 10.0.4.0/24
       MapPublicIpOnLaunch: false
      
