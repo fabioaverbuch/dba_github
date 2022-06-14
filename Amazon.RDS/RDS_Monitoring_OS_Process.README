@@ -1,0 +1,147 @@
+-- general --
+engine: O mecanismo de banco de dados para a instância de banco de dados.
+
+instanceID: O DB instance identifier.
+
+instanceResourceID: Um identificador imutável para a instância de Bancos de Dados que é exclusivo para uma região da AWS, também usado como o identificador de stream de logs.
+
+numVCPUs: O número de CPUs virtuais para a instância de banco de dados.
+
+timestamp: A hora em que as métricas foram obtidas.
+
+uptime: Por quanto tempo a instância de banco de dados esteve ativa.
+
+
+-- cpuUtilization --
+
+guest: A porcentagem de CPU em uso por programas de convidado.]
+
+idle: A porcentagem de CPU que está ociosa.
+
+irq: A porcentagem de CPU em uso por interrupções de software.
+
+nice: A porcentagem de CPU em uso por programas em execução com a prioridade mais baixa.
+
+system: A porcentagem de CPU em uso pelo kernel.
+
+total: A porcentagem total da CPU em uso. Esse valor inclui o valor de nice.
+
+user: A porcentagem de CPU em uso por programas do usuário.
+
+
+-- diskIO --
+
+wait: A porcentagem de CPU fora de uso ao aguardar o acesso de E/S.
+
+await: O número de milissegundos necessários para responder a solicitações, incluindo o tempo na fila e o tempo de serviço.
+
+device: O identificador do dispositivo de disco em uso.
+
+readIOsPS: O número de operações de leitura por segundo.
+
+readKb: O número total de kilobytes lidos.
+
+readKbPS: O número de kilobytes lidos por segundo.
+
+readLatency: O tempo decorrido entre o envio de uma solicitação de E/S de leitura e sua conclusão, em milissegundos.Essa métrica só está disponível para o Amazon Aurora.
+
+readThroughput: A quantidade de taxa de transferência da rede usada por solicitações para o cluster de banco de dados, em bytes por segundo. Essa métrica só está disponível para o Amazon Aurora.
+
+tps: O número de transações de E/S por segundo.
+
+util: Utilização de E/S de disco. A porcentagem de tempo de CPU durante o qual as solicitações foram emitidas.
+
+writeIOsPS: E/Ss de gravação. O número de operações de gravação por segundo.
+
+writeKb: O número total de kilobytes gravados.
+
+writeKbPS: O número de kilobytes gravados por segundo.
+
+writeLatency: O tempo médio decorrido entre o envio de uma solicitação de E/S de gravação e sua conclusão, em milissegundos. Essa métrica só está disponível para o Amazon Aurora.
+
+writeThroughput: A quantidade de taxa de transferência da rede usada por respostas do cluster de banco de dados, em bytes por segundo. Essa métrica só está disponível para o Amazon Aurora.
+
+
+-- fileSys --
+
+maxFiles: Máximo de Inodes. O número máximo de arquivos que podem ser criados para o sistema de arquivos.
+
+mountPoint: O caminho para o sistema de arquivos.
+
+name: O nome do sistema de arquivos.
+
+total: Total do sistema de arquivos
+
+used: A quantidade de espaço em disco usada pelos arquivos no sistema de arquivos, em kilobytes.
+
+usedFilePercent: A porcentagem de arquivos disponíveis em uso.
+
+usedFiles: Inodes usados. O número de arquivos no sistema de arquivos.
+
+usedPercent: % de Inodes usados.
+
+
+-- memory --
+
+memory: Memória ativa em kilobytes.
+	
+buffers: Memória armazenada em buffer. A quantidade de memória usada para o buffer de solicitações de E/S antes de gravar no dispositivo de armazenamento, em kilobytes.
+
+cached: Memória em cache. A quantidade de memória utilizada para o armazenamento em cache da E/S baseada em sistema de arquivos.
+
+dirty: Memória suja. A quantidade de páginas de memória na RAM que foram modificadas, mas não gravadas em seus blocos de dados relacionados no armazenamento, em kilobytes.
+
+free: Memória livre. A quantidade de memória não atribuída, em kilobytes.
+
+total: Memória total  em kilobytes.
+	
+writeback: A quantidade de páginas sujas na RAM que ainda estão sendo gravadas no armazenamento de suporte, em kilobytes.
+
+
+-- network --
+
+interface: O identificador da interface de rede que está sendo usada para a instância de banco de dados.
+
+rx: O número de bytes recebidos por segundo.
+
+tx: O número de bytes carregados por segundo.
+
+
+-- processList --
+
+cpuUsedPc: A porcentagem de CPU usada pelo processo.
+
+id: O identificador do processo.
+
+memoryUsedPc: A porcentagem da memória usada pelo processo.
+
+name: O nome do processo.
+
+vss: A quantidade de memória virtual alocada ao processo, em kilobytes.
+
+
+-- swap --
+
+swap: A quantidade de memória de permuta disponível, em kilobytes.
+
+swap in: A quantidade de memória, em kilobytes, transferida temporariamente do disco.
+
+swap out: A quantidade de memória, em kilobytes, transferida temporariamente para o disco.
+
+free: A quantidade de memória de troca livre, em kilobytes.
+
+
+-- tasks --
+
+blocked: O número de tarefas que estão bloqueadas.
+
+running: O número de tarefas que estão sendo executadas.
+
+sleeping: O número de tarefas que estão em suspensão.
+
+stopped: O número de tarefas que estão interrompidas.
+
+total: O número total de tarefas.
+
+zombie: Tarefas Zombie
+	

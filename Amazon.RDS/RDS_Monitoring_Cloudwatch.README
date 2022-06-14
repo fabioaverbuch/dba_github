@@ -1,1 +1,51 @@
- 
+DBClusters: O número de clusters de banco de dados do Amazon Aurora em sua Conta da AWS. 
+
+DBInstances: O número de instâncias de banco de dados em sua Conta da AWS.
+
+DBSecurityGroups: O número de grupos de segurança em sua Conta da AWS. A contagem exclui o grupo de segurança padrão e o da VPC padrão.
+
+DBSubnetGroups: O número de grupos de sub-redes de banco de dados em sua Conta da AWS. A contagem exclui o grupo de sub-redes padrão.
+
+ManualClusterSnapshots: O número de snapshots de cluster de banco de dados criados manualmente em sua Conta da AWS. A contagem exclui snapshots inválidos.
+
+ManualSnapshots: O número de snapshots de banco de dados criados manualmente em sua Conta da AWS. A contagem exclui snapshots inválidos.
+
+OptionGroups: O número de grupos de opções em sua Conta da AWS. A contagem exclui os grupo de opções padrão.
+
+CPUUtilization: O percentual de utilização da CPU.
+
+DatabaseConnections: O número de conexões de rede cliente com a instância do banco de dados.	
+
+FreeableMemory: A quantidade de memória de acesso aleatório disponível. Para instâncias de banco de dados MariaDB, MySQL, Oracle e PostgreSQL, essa métrica reporta o valor do campo MemAvailable de /proc/meminfo.
+	
+FreeLocalStorage: A quantidade de espaço de armazenamento local disponível. Aplica-se somente a clusters de banco de dados multi-AZ.
+	
+FreeStorageSpace: A quantidade de espaço de armazenamento disponível.
+
+NetworkReceiveThroughput: O tráfego de rede de entrada (recebido) na instância de banco de dados, incluindo o tráfego de banco de dados do cliente e o tráfego do Amazon RDS usado para monitoramento e replicação.
+
+NetworkTransmitThroughput: Taxa de transferência de transmissão de rede (MB/segundo)
+
+ReadIOPS: O número médio de operações E/S de leitura de disco por segundo.
+
+ReadIOPSLocalStorage: O número médio de operações de E/S de leitura de disco no armazenamento local por segundo. Aplica-se somente a clusters de banco de dados multi-AZ.
+
+ReadLatency: Otempo médio necessário por operação de I/O de disco.
+
+ReadLatencyLocalStorage: Armazenamento local de latência de leitura (milissegundos)
+
+ReadThroughput: Taxa de transferência de leitura (MB/segundo)
+
+ReadThroughputLocalStorage: O número médio de bytes lidos do disco por segundo para armazenamento local. Aplica-se somente a clusters de banco de dados multi-AZ.
+
+ReplicaLag: Atraso da réplica (milissegundos)
+
+SwapUsage: A quantidade de troca usada na instância de banco de dados.
+
+WriteIOPS: O número médio de operações de E/S de gravação de disco por segundo.
+
+WriteIOPSLocalStorage: O número médio de operações de E/S de gravação de disco por segundo no armazenamento local em um cluster de banco de dados Multi-AZ.
+
+WriteLatency: Latência de gravação (milissegundos). tempo médio necessário por operação de I/O de disco.
+	
+WriteLatencyLocalStorage: Armazenamento local de latência de gravação (milissegundos). O tempo médio necessário por operação de E/S de disco no armazenamento local em um cluster de banco de dados Multi-AZ.
