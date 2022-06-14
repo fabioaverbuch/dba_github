@@ -1,0 +1,85 @@
+Lock Access Levels
+
+Shared Locks
+When a thread needs to protect a resource, but it is not going to change the
+resource, it can use a shared lock to prevent other threads from changing the
+resource while still allowing them to access the same resource. This is the most
+commonly used access level.
+
+Exclusive Locks
+Exclusive locks are the counterpart to shared lock. They ensure that only the
+thread granted the exclusive lock can access the resource for the duration of the
+lock. As exclusive locks are used to ensure only one thread is modifying a
+resource at a time, they are also known as write locks.
+Exclusive locks are mostly obtained by data definition language (DDL)
+
+Intention Locks
+In the two examples this far in this chapter, there have been intention locks .
+What are those? It is a lock that signals the intention of an InnoDB transaction
+and can be either shared or exclusive. 
+
+
+High-Level Locks
+
+You manipulate user-level locks with a set of functions:
+GET_LOCK(name, timeout): Obtains a lock by specifying the name
+of the lock. The second argument is a timeout in seconds; if the lock is not
+obtained within that time, the function returns 0. If the lock is obtained, the
+return value is 1. If the timeout is negative, the function will wait indefinitely
+for the lock to become available.
+IS_FREE_LOCK(name): Checks whether the named lock is available
+or not. The function returns 1 if the lock is available and 0 if it is not
+available.
+IS_USED_LOCK(name): This is the opposite of the
+IS_FREE_LOCK() function. The function returns the connection id of the
+connection holding the lock if the lock is in use (not available) and NULL if it
+is not in use (available).
+RELEASE_ALL_LOCKS(): Releases all user-level locks held by the
+connection. The return value is the number of locks released.
+RELEASE_LOCK(name): Releases the lock with the provided name.
+The return value is 1 if the lock is released, 0 if the lock exists but is not
+owned by the connection, or NULL if the lock does not exist.
+
+Flush Locks
+A flush lock will be familiar to most who have been involved in taking backups.
+It is taken when you use the FLUSH TABLES statement and last for the duration
+of the statement unless you add WITH READ LOCK in which case a shared
+(read) lock is held until the lock is explicitly released. An implicit table flush is
+also triggered at the end of the ANALYZE TABLE statement. The flush lock is a
+table-level lock. The read lock taken with FLUSH TABLES WITH READ
+LOCK is discussed later under explicit table locks.
+
+Metadata Locks
+Metadata locks are one of the newer lock types in MySQL. They were
+introduced in MySQL 5.5, and their purpose is to protect the schema, so it does
+not get changed while queries or transactions rely on the schema to be
+unchanged. Metadata locks work at the table level, but they should be considered
+as an independent lock type to table locks as they do not protect the data in the
+tables.
+
+Explicit Table Locks
+Explicit table locks are taken with the LOCK TABLES and the FLUSH
+TABLES WITH READ LOCK statements. With the LOCK TABLES statement,
+it is possible to take shared or exclusive locks; FLUSH TABLES WITH READ
+LOCK always takes a shared lock. The tables are locked, until they are explicitly
+released with the UNLOCK TABLES statement. When FLUSH TABLES WITH
+READ LOCK is executed without listing any tables, the global read lock (i.e.,
+affecting all tables) is taken. While these locks also protect the data, they are
+considered as metadata locks in MySQL.
+
+Backup Locks
+The backup lock is an instance-level lock; that is, it affects the system as a
+whole. It is a new lock introduced in MySQL 8. The backup lock prevents
+statements that can make a backup inconsistent while still allowing other
+statements to be executed concurrently with the backup. Currently the primary
+user of the backup lock is MySQL Enterprise Backup which uses it together with
+the log lock to avoid executing FLUSH TABLES WITH READ LOCK for
+InnoDB tables. The statements that are blocked include
+
+Log Locks
+When you create a backup, you typically want to include information about the
+log positions and GTID set the backup is consistent with. In MySQL 5.7 and
+earlier, you needed the global read lock while obtaining this information. In
+MySQL 8, the log lock was introduced to allow you to read information such as
+the executed global transaction identifiers (GTIDs), the binary log position, and
+the log sequence number (LSN) for InnoDB without taking a global read lock. 

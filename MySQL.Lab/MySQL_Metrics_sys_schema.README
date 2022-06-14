@@ -1,0 +1,101 @@
+host_summary: Statement activity, file I/O, and connections, grouped by host 	
+
+host_summary_by_file_io: File I/O, grouped by host 	
+
+host_summary_by_file_io_type: File I/O, grouped by host and event type 	
+
+host_summary_by_stages: Statement stages, grouped by host 	
+
+host_summary_by_statement_latency: Statement statistics, grouped by host 	
+
+host_summary_by_statement_type: Statements executed, grouped by host and statement 	
+
+innodb_buffer_stats_by_schema: InnoDB buffer information, grouped by schema 	
+
+innodb_buffer_stats_by_table: InnoDB buffer information, grouped by schema and table 
+
+innodb_lock_waits,:	InnoDB lock information 	
+
+io_by_thread_by_latency: I/O consumers, grouped by thread 	
+
+io_global_by_file_by_bytes:	Global I/O consumers, grouped by file and bytes 
+
+io_global_by_file_by_latency: Global I/O consumers, grouped by file and latency 
+
+io_global_by_wait_by_bytes:	Global I/O consumers, grouped by bytes 	
+
+io_global_by_wait_by_latency: Global I/O consumers, grouped by latency 	
+
+latest_file_io:	Most recent I/O, grouped by file and thread 
+
+memory_by_host_by_current_bytes: Memory use, grouped by host 
+
+memory_by_thread_by_current_bytes: Memory use, grouped by thread 	
+
+memory_by_user_by_current_bytes: Memory use, grouped by user 
+
+memory_global_by_current_bytes:	Memory use, grouped by allocation type 
+
+memory_global_total: Total memory use metrics 	Server metrics 	
+
+processlist: Processlist information 	
+
+schema_auto_increment_columns: AUTO_INCREMENT column information 	
+
+schema_index_statistics: Index statistics 	
+
+schema_object_overview:	Types of objects within each schema 	
+
+schema_redundant_indexes: Duplicate or redundant indexes 	
+
+schema_table_lock_waits: Sessions waiting for metadata locks 	
+
+schema_table_statistics: Table statistics 	
+
+schema_table_statistics_with_buffer: Table statistics, including InnoDB buffer pool statistics 	
+
+schema_tables_with_full_table_scans: Tables being accessed with full scans 	
+
+schema_unused_indexes: Indexes not in active use 	
+
+session: Processlist information for user sessions 	
+
+session_ssl_status:	Connection SSL information 	
+
+statement_analysis: Statement aggregate statistics 	
+
+statements_with_errors_or_warnings:	Statements that have produced errors or warnings 	
+
+statements_with_full_table_scans: Statements that have done full table scans 	
+
+statements_with_runtimes_in_95th_percentile: Statements with highest average runtime 	
+
+statements_with_sorting: Statements that performed sorts 	
+
+statements_with_temp_tables: Statements that used temporary tables 	
+
+user_summary: User statement and connection activity 	
+
+user_summary_by_file_io: File I/O, grouped by user 	
+
+user_summary_by_file_io_type: File I/O, grouped by user and event 	
+
+user_summary_by_stages:	Stage events, grouped by user 	
+
+user_summary_by_statement_latency: Statement statistics, grouped by user 
+
+user_summary_by_statement_type: Statements executed, grouped by user and statement 	
+
+wait_classes_global_by_avg_latency:	Wait class average latency, grouped by event class 	
+
+wait_classes_global_by_latency: Wait class total latency, grouped by event class 	
+
+waits_by_host_by_latency: Wait events, grouped by host and event 	
+
+waits_by_user_by_latency: Wait events, grouped by user and event 	
+
+waits_global_by_latency: Wait events, grouped by event 	
+
+x$ps_schema_table_statistics_io: Helper view for table-statistics views 	
+
+x$schema_flattened_keys: Helper view for schema_redundant_indexes
