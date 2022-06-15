@@ -1,3 +1,9 @@
+git remote -v
+
 git push https://[token]@github.com/fabioaverbuch/dba_github.git
 
 git push --set-upstream target main
+
+git push https://[token]@github.com/fabioaverbuch/dba_github.git main
+
+git pull target main
