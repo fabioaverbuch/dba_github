@@ -1,62 +1,87 @@
-performance_schema.metadata_locks
-OBJECT_TYPE The kind of lock that is held such as GLOBAL for the global read lock and TABLE for tables and views.
-OBJECT_SCHEMA The schema the object that is locked belongs to.
-OBJECT_NAME The name of the locked object.
-COLUMN_NAME For column level locks, the column name of the locked column.
-OBJECT_INSTANCE_BEGIN The memory address of the object.
-LOCK_TYPE The lock access level such as shared, exclusive, or intention. 
-LOCK_DURATION How long the lock is held for. Supported values are STATEMENT,
-TRANSACTION, and EXPLICIT.
-LOCK_STATUS The status of the lock. In addition to a granted and pending status, it can also show that the lock request timed out, was a victim, etc.
-SOURCE The place in the source code where the lock was requested.
-OWNER_THREAD_ID The Performance Schema thread id of the thread that requested the lock.
-OWNER_EVENT_ID The event id of the event requesting the lock.
-The primary key of the table is the OBJECT_INSTANCE_BEGIN column.
-
-performance_schema.data_locks 
-ENGINE The storage engine for the data. For MySQL Server, this will always be InnoDB.
-ENGINE_LOCK_ID The internal id of the lock as used by the storage engine. You should not rely on the id having a particular format.
-ENGINE_TRANSACTION_ID The transaction id specific to the storage engine. 
-THREAD_ID The Performance Schema thread id of the thread that made the lock request.
-EVENT_ID The Performance Schema event id of the event that made the lock request. 
-OBJECT_SCHEMA The schema the object that is subject of the lock request is in.
-OBJECT_NAME The name of the object that is subject of the lock request.
-PARTITION_NAME For locks involving partitions, the name of the partition.
-SUBPARTITION_NAME For locks involving subpartitions, the name of the subpartition.
-INDEX_NAME For locks involving indexes, the name of the index. Since everything is an index for InnoDB, the index name is always set for record level locks on InnoDB tables. 
-GEN_CLUST_INDEX depending on whether you have an explicit primary key or the table used a hidden clustered index.
-OBJECT_INSTANCE_BEGIN The memory address of the lock request.
-LOCK_TYPE The level of the lock request. For InnoDB, the possible values are TABLE and RECORD.
-LOCK_MODE The locking mode used. This includes whether it is a shared or exclusive lock and the finer details of the lock, for example, REC_NOT_GAP for a record lock but no gap lock.
-LOCK_STATUS Whether the lock is pending (WAITING) or has been granted (GRANTED).
-LOCK_DATA Information about the data that is locked. This can, for example, be the index value of the locked index record.
-The primary key of the table is (ENGINE_LOCK_ID, ENGINE).
-
-performance_schema.data_lock_waits
-ENGINE The storage engine where the lock contention occurs.
-REQUESTING_ENGINE_LOCK_ID The ENGINE_LOCK_ID for the pending lock.
-REQUESTING_ENGINE_TRANSACTION_ID The ENGINE_TRANSACTION_ID for the pending lock.
-REQUESTING_THREAD_ID The THREAD_ID for the pending lock.
-REQUESTING_EVENT_ID The EVENT_ID for the pending lock.
-REQUESTING_OBJECT_INSTANCE_BEGIN The OBJECT_INSTANCE_BEGIN for the pending lock.
-BLOCKING_ENGINE_LOCK_ID The ENGINE_LOCK_ID for the blocking lock.
-BLOCKING_ENGINE_TRANSACTION_ID The ENGINE_TRANSACTION_ID for the blocking lock.
-BLOCKING_THREAD_ID The THREAD_ID for the blocking lock.
-BLOCKING_EVENT_ID The EVENT_ID for the blocking lock.
-BLOCKING_OBJECT_INSTANCE_BEGIN The OBJECT_INSTANCE_BEGIN for the blocking lock.
-
-performance_schema.events_waits_current: The current ongoing or last completed wait
-
-performance_schema.events_waits_history: The last ten (the performance_schema_events_waits_history_size option) wait events for each existing thread
-
-performance_schema.events_waits_history_long: The last 10,000 (the performance_schema_events_waits_history_long_size option) events globally, including for threads that no longer exist
-
-performance_schema.events_waits_summary_by_account_by_event_name: The wait events grouped by the username and hostname of the accounts (also called actors in the Performance Schema)
-
-performance_schema.events_waits_summary_by_host_by_event_name: The wait events grouped by the hostname of the account triggering the event and event name
-
-performance_schema.events_waits_summary_by_instance: The wait events grouped by instance
-
-performance_schema.events_waits_summary_by_thread_by_event_name: The wait events for currently existing threads grouped by the thread id and event name
-
-performance_schema.events_waits_summary_by_user_by_event_name: The wait events grouped by the username of the account triggering the event and event name
+accounts 	Connection statistics per client account 	
+cond_instances 	Synchronization object instances 	
+events_stages_current 	Current stage events 	
+events_stages_history 	Most recent stage events per thread 	
+events_stages_history_long 	Most recent stage events overall 	
+events_stages_summary_by_account_by_event_name 	Stage events per account and event name 	
+events_stages_summary_by_host_by_event_name 	Stage events per host name and event name 	
+events_stages_summary_by_thread_by_event_name 	Stage waits per thread and event name 	
+events_stages_summary_by_user_by_event_name 	Stage events per user name and event name 	
+events_stages_summary_global_by_event_name 	Stage waits per event name 	
+events_statements_current 	Current statement events 	
+events_statements_history 	Most recent statement events per thread 	
+events_statements_history_long 	Most recent statement events overall 	
+events_statements_summary_by_account_by_event_name 	Statement events per account and event name 	
+events_statements_summary_by_digest 	Statement events per schema and digest value 	
+events_statements_summary_by_host_by_event_name 	Statement events per host name and event name 	
+events_statements_summary_by_program 	Statement events per stored program 	
+events_statements_summary_by_thread_by_event_name 	Statement events per thread and event name 	
+events_statements_summary_by_user_by_event_name 	Statement events per user name and event name 	
+events_statements_summary_global_by_event_name 	Statement events per event name 	
+events_transactions_current 	Current transaction events 	
+events_transactions_history 	Most recent transaction events per thread 	
+events_transactions_history_long 	Most recent transaction events overall 	
+events_transactions_summary_by_account_by_event_name 	Transaction events per account and event name 	
+events_transactions_summary_by_host_by_event_name 	Transaction events per host name and event name 	
+events_transactions_summary_by_thread_by_event_name 	Transaction events per thread and event name 	
+events_transactions_summary_by_user_by_event_name 	Transaction events per user name and event name 	
+events_transactions_summary_global_by_event_name 	Transaction events per event name 	
+events_waits_current 	Current wait events 	
+events_waits_history 	Most recent wait events per thread 	
+events_waits_history_long 	Most recent wait events overall 	
+events_waits_summary_by_account_by_event_name 	Wait events per account and event name 	
+events_waits_summary_by_host_by_event_name 	Wait events per host name and event name 	
+events_waits_summary_by_instance 	Wait events per instance 	
+events_waits_summary_by_thread_by_event_name 	Wait events per thread and event name 	
+events_waits_summary_by_user_by_event_name 	Wait events per user name and event name 	
+events_waits_summary_global_by_event_name 	Wait events per event name 	
+file_instances 	File instances 	
+file_summary_by_event_name 	File events per event name 	
+file_summary_by_instance 	File events per file instance 	
+global_status 	Global status variables 	
+global_variables 	Global system variables 	
+host_cache 	Information from internal host cache 	
+hosts 	Connection statistics per client host name 	
+memory_summary_by_account_by_event_name 	Memory operations per account and event name 	
+memory_summary_by_host_by_event_name 	Memory operations per host and event name 	
+memory_summary_by_thread_by_event_name 	Memory operations per thread and event name 	
+memory_summary_by_user_by_event_name 	Memory operations per user and event name 	
+memory_summary_global_by_event_name 	Memory operations globally per event name 	
+metadata_locks 	Metadata locks and lock requests 	
+mutex_instances 	Mutex synchronization object instances 	
+objects_summary_global_by_type 	Object summaries 	
+performance_timers 	Which event timers are available 	
+prepared_statements_instances 	Prepared statement instances and statistics 	
+replication_applier_configuration 	Configuration parameters for replication applier on replica 	
+replication_applier_status 	Current status of replication applier on replica 	
+replication_applier_status_by_coordinator 	SQL or coordinator thread applier status 	
+replication_applier_status_by_worker 	Worker thread applier status 	
+replication_connection_configuration 	Configuration parameters for connecting to source 	
+replication_connection_status 	Current status of connection to source 	
+replication_group_member_stats 	Replication group member statistics 	
+replication_group_members 	Replication group member network and status 	
+rwlock_instances 	Lock synchronization object instances 	
+session_account_connect_attrs 	Connection attributes per for current session 	
+session_connect_attrs 	Connection attributes for all sessions 	
+session_status 	Status variables for current session 	
+session_variables 	System variables for current session 	
+setup_actors 	How to initialize monitoring for new foreground threads 	
+setup_consumers 	Consumers for which event information can be stored 	
+setup_instruments 	Classes of instrumented objects for which events can be collected 	
+setup_objects 	Which objects should be monitored 	
+setup_timers 	Currently selected event timers 	
+socket_instances 	Active connection instances 	
+socket_summary_by_event_name 	Socket waits and I/O per event name 	
+socket_summary_by_instance 	Socket waits and I/O per instance 	
+status_by_account 	Session status variables per account 	
+status_by_host 	Session status variables per host name 	
+status_by_thread 	Session status variables per session 	
+status_by_user 	Session status variables per user name 	
+table_handles 	Table locks and lock requests 	
+table_io_waits_summary_by_index_usage 	Table I/O waits per index 	
+table_io_waits_summary_by_table 	Table I/O waits per table 	
+table_lock_waits_summary_by_table 	Table lock waits per table 	
+threads 	Information about server threads 	
+user_variables_by_thread 	User-defined variables per thread 	
+users 	Connection statistics per client user name 	
+variables_by_thread 	Session system variables per session 	
