@@ -8,6 +8,8 @@ Object.keys(db.irons.findOne())
 
 db.collectionName.renameCollection(NewcollectionName)
 
+db.runCommand({compact : collectionName}) 
+
 db.runCommand({count: collectionName})
 
 db.runCommand ({distinct: collectionName, key: FieldName})
@@ -18,14 +20,5 @@ db.collectionName.find().limit(NUMBER)
 
 db.collectionName.find().sort({KEY:1})
 
-db.collectionName.createIndex({fieldName1: 1/-1, fieldName2: 1/-1 ..},{name: indexName},{unique: true })
 
-db.collectionName.dropIndex(indexName)
 
-db.collectionName.getIndexes()
-
-db.runCommand ({listIndexes: collectionName})
-
-db.collectionName.reIndex()
-
-db.runCommand({compact : collectionName}) 

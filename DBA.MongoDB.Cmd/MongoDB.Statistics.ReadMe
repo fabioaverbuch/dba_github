@@ -2,8 +2,6 @@ db.adminCommand({top:1})
 
 db.runCommand({serverStatus:1})
 
-db.runCommand({collStats: collectionName, scale:1024}) 
-
 db.runCommand({dataSize: dbName.collectionName, estimate : true})
 
 db.runCommand({connPoolStats: 1})

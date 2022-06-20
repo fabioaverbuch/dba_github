@@ -1,13 +1,3 @@
-db.getUsers() 
-
-db.createUser({	user: 'dbadmin',pwd: 'm3dus4$',roles:[{role:'userAdminAnyDatabase', db:'admin'}]})
-
-db.auth('dbadmin', 'm3dus4$')
-
-db.changeUserPassword('dbadmin', 'm3dus4$1')
-
-db.dropUser('dbadmin')
-
 db.getRole('userAdminAnyDatabase',{showPrivileges: true }) 
 
 db.grantRolesToUser('dbadmin',[{role:'readWrite', db :'admin'}])
@@ -38,4 +28,4 @@ clusterAdmin – Combines the other three roles plus dropDatabase action
 Backup and Restoration Roles
 backup – Provides the privileges needed for backing up data
 restore – Provides the privileges needed to restore data from backups
-
+ 
