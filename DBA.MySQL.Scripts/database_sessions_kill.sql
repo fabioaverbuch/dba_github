@@ -1,3 +1,3 @@
-SELECT GROUP_CONCAT(CONCAT('KILL ',id,';') SEPARATOR ' ') 'KillStatement' 
+SELECT group_concat(concat('kill ',id,';') separator ' ') 'KillStatement' 
 FROM information_schema.processlist 
 WHERE user='Username'; 

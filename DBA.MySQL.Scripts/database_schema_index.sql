@@ -1,4 +1,4 @@
-SELECT TABLE_SCHEMA, TABLE_NAME, INDEX_NAME, SEQ_IN_INDEX, COLUMN_NAME, INDEX_TYPE    
-FROM INFORMATION_SCHEMA.STATISTICS 
+SELECT table_schema, table_name, index_name, seq_in_index, column_name, index_type    
+FROM information_schema.statistics 
 WHERE table_schema = 'DBName'
-ORDER BY TABLE_NAME, INDEX_NAME; 
+ORDER BY table_name, index_name; 
