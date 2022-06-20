@@ -20,9 +20,6 @@ db.comedy.insert([{name: "The Hangover Part II", year: 2011, tagline:'Bangkok ha
     technical: {runningTime: 102, language: 'English'}, sequel: 'The Hangover Part III',    
     merits: {budget: 80, boxOffice: 581}, comments:[{by:'Anne', text:'Liked the first part better'}, {by:'Robin', text:'Over the top'}]})
 
-/* Remove a field of collection */
-db.products.updateMany({}, {$unset: {comments: ""}})
-
 /* Conditional operators */
 db.collectionName.find({ "field" : { $gt: value } } );   // greater than  : field > value
 db.collectionName.find({ "field" : { $lt: value } } );   // less than  :  field < value
