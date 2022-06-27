@@ -1,3 +1,6 @@
 mongosh mongodb://127.0.0.1:27017 --username dbadmin (m3dus4$)
 
-mysql --host mysql-db-01.cadwm8i1pdwb.us-east-2.rds.amazonaws.com -u admin -p m3dus4$1 
+mysql --host endpoint.us-east-2.rds.amazonaws.com -u admin -p m3dus4$1 
+
+psql  --host=endpoint.us-east-2.rds.amazonaws.com --port=5432 --username=postgres --password --dbname=postgres m3dus4$1
+
