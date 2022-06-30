@@ -6,6 +6,6 @@ git push --set-upstream target main
 
 git push https://[token]@github.com/fabioaverbuch/dba_github.git main
 
-git push https://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@github.com/fabioaverbuch/dba_github.git
+git push https://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@github.com/fabioaverbuch/dba_github.git
 
 git pull target main
