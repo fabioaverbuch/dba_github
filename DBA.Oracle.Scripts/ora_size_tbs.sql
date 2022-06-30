@@ -1,50 +1,66 @@
-
-ALTER SESSION SET NLS_DATE_FORMAT = 'DD/MM/YYYY';
-ALTER SESSION SET NLS_LANGUAGE = 'BRAZILIAN PORTUGUESE';
-ALTER SESSION SET NLS_TERRITORY = 'BRAZIL';
-ALTER SESSION SET NLS_NUMERIC_CHARACTERS = ',.';
-SET LINESIZE 500
-SET PAGESIZE 500
-
-COLUMN TABLESPACE_NAME FORMAT A30
-COLUMN FILE_NAME FORMAT A80
-COLUMN MAX_SIZE_MB FORMAT 999G999D99
-COLUMN SIZE_MB FORMAT 999G999D99
-COLUMN MAX_FREE_MB FORMAT 999G999D99
-
-SELECT TABLESPACE_NAME, 
-TO_CHAR(MAX_SIZE_MB,'999G999G999D99') MAX_SIZE_MB,
-TO_CHAR(SIZE_MB,'999G999G999D99') SIZE_MB,
-TO_CHAR(MAX_FREE_MB,'999G999G999D99') MAX_FREE_MB,
-TRUNC((MAX_FREE_MB/MAX_SIZE_MB) * 100) AS FREE_PCT
-FROM (SELECT A.TABLESPACE_NAME,  B.MAX_SIZE_MB, B.SIZE_MB, 
-A.FREE_MB + (B.MAX_SIZE_MB - B.SIZE_MB) AS MAX_FREE_MB
-FROM (SELECT TABLESPACE_NAME,
-TRUNC(SUM(BYTES)/1024/1024) AS FREE_MB
-FROM   DBA_FREE_SPACE
-GROUP BY TABLESPACE_NAME) A,
-(SELECT TABLESPACE_NAME,
-TRUNC(SUM(BYTES)/1024/1024) AS SIZE_MB,
-TRUNC(SUM(GREATEST(BYTES,MAXBYTES))/1024/1024) AS MAX_SIZE_MB
-FROM   DBA_DATA_FILES
-GROUP BY TABLESPACE_NAME) B
-WHERE  A.TABLESPACE_NAME = B.TABLESPACE_NAME)
-ORDER BY SIZE_MB DESC;
-  
-
-COLUMN FILE_ID FORMAT 999
-COLUMN TABLESPACE_NAME FORMAT A30
-COLUMN FILE_NAME FORMAT A80
-COLUMN MAXSIZE_MB FORMAT 999G999D99
-COLUMN SIZE_MB FORMAT 999G999D99
-COLUMN FREE_MB FORMAT 999G999D99
-
-SELECT DF.TABLESPACE_NAME, DF.FILE_ID, DF.FILE_NAME, 
-TO_CHAR(DF.MAXBYTES/1024/1024,'999G999G999D99') "MAXSIZE_MB",
-TO_CHAR(DF.BYTES/1024/1024,'999G999D99') "SIZE_MB",
-TO_CHAR((DF.MAXBYTES - DF.BYTES)/1024/1024,'999G999G999D99') "FREE_MB"
-FROM DBA_DATA_FILES DF
-INNER JOIN DBA_TABLESPACES TB ON DF.TABLESPACE_NAME = TB.TABLESPACE_NAME
-ORDER BY DF.TABLESPACE_NAME, DF.FILE_NAME;
-
-
+set feedback off
+set pagesize 70;
+set linesize 2000
+set head on
+COLUMN Tablespace format a25 heading 'Tablespace Name'
+COLUMN autoextensible format a11 heading 'AutoExtend'
+COLUMN files_in_tablespace format 999 heading 'Files'
+COLUMN total_tablespace_space format 99999999 heading 'TotalSpace'
+COLUMN total_used_space format 99999999 heading 'UsedSpace'
+COLUMN total_tablespace_free_space format 99999999 heading 'FreeSpace'
+COLUMN total_used_pct format 9999 heading '%Used'
+COLUMN total_free_pct format 9999 heading '%Free'
+COLUMN max_size_of_tablespace format 99999999 heading 'ExtendUpto'
+COLUM total_auto_used_pct format 999.99 heading 'Max%Used'
+COLUMN total_auto_free_pct format 999.99 heading 'Max%Free'
+WITH tbs_auto AS
+(SELECT DISTINCT tablespace_name, autoextensible
+FROM dba_data_files
+WHERE autoextensible = 'YES'),
+files AS
+(SELECT tablespace_name, COUNT (*) tbs_files,
+SUM (BYTES/1024/1024) total_tbs_bytes
+FROM dba_data_files
+GROUP BY tablespace_name),
+fragments AS
+(SELECT tablespace_name, COUNT (*) tbs_fragments,
+SUM (BYTES)/1024/1024 total_tbs_free_bytes,
+MAX (BYTES)/1024/1024 max_free_chunk_bytes
+FROM dba_free_space
+GROUP BY tablespace_name),
+AUTOEXTEND AS
+(SELECT tablespace_name, SUM (size_to_grow) total_growth_tbs
+FROM (SELECT tablespace_name, SUM (maxbytes)/1024/1024 size_to_grow
+FROM dba_data_files
+WHERE autoextensible = 'YES'
+GROUP BY tablespace_name
+UNION
+SELECT tablespace_name, SUM (BYTES)/1024/1024 size_to_grow
+FROM dba_data_files
+WHERE autoextensible = 'NO'
+GROUP BY tablespace_name)
+GROUP BY tablespace_name)
+SELECT c.instance_name,a.tablespace_name Tablespace,
+CASE tbs_auto.autoextensible
+WHEN 'YES'
+THEN 'YES'
+ELSE 'NO'
+END AS autoextensible,
+files.tbs_files files_in_tablespace,
+files.total_tbs_bytes total_tablespace_space,
+(files.total_tbs_bytes - fragments.total_tbs_free_bytes
+) total_used_space,
+fragments.total_tbs_free_bytes total_tablespace_free_space,
+round(( ( (files.total_tbs_bytes - fragments.total_tbs_free_bytes)
+/ files.total_tbs_bytes
+)
+* 100
+)) total_used_pct,
+round(((fragments.total_tbs_free_bytes / files.total_tbs_bytes) * 100
+)) total_free_pct
+FROM dba_tablespaces a,v$instance c , files, fragments, AUTOEXTEND, tbs_auto
+WHERE a.tablespace_name = files.tablespace_name
+AND a.tablespace_name = fragments.tablespace_name
+AND a.tablespace_name = AUTOEXTEND.tablespace_name
+AND a.tablespace_name = tbs_auto.tablespace_name(+)
+order by total_free_pct;
