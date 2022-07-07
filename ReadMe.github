@@ -6,4 +6,6 @@ git push https://[token]@github.com/fabioaverbuch/dba_github.git main
 
 git push https://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@github.com/fabioaverbuch/dba_github.git
 
+git remote -v
 
+git pull origin main
