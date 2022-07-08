@@ -2,4 +2,6 @@ git push https://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@github.com/fabioaverbu
 
 git remote -v
 
+git remote set-url origin <remote_url>
+
 git pull origin main
