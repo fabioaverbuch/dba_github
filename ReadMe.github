@@ -1,7 +1,7 @@
-git push https://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@github.com/fabioaverbuch/dba_github.git
+git push https://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@github.com/fabioaverbuch/dba_github.git
 
 git remote -v
 
-git remote set-url origin <remote_url>
+git remote set-url origin https://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@github.com/fabioaverbuch/dba_github.git
 
 git pull origin main
