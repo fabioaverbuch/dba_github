@@ -1,9 +1,0 @@
-db.adminCommand({top:1})
-
-db.runCommand({serverStatus:1})
-
-db.runCommand({dataSize: dbName.collectionName, estimate : true})
-
-db.runCommand({connPoolStats: 1})
-
-
