@@ -1,8 +1,19 @@
 
 EXPLAIN PLAN SET STATEMENT_ID = '<STATEMENT_NAME>' FOR SELECT ....
 
-SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY('PLAN_TABLE','<STATEMENT_NAME>','BASIC | TYPICAL | SERIAL | ALL'));
-									   
+DBMS_XPLAN.DISPLAY_CURSOR(
+SQL_ID            IN  VARCHAR2  DEFAULT  NULL,
+CURSOR_CHILD_NO   IN  NUMBER    DEFAULT  0,
+FORMAT            IN  VARCHAR2  DEFAULT  'TYPICAL');
+
+Parâmetros
+SQL_ID:
+Especifique o SQL_ID da instrução SQL no “cursor cache”. Você pode recuperar esse código consultando a coluna SQL_ID nas visões V$SQL ou V$SQLAREA. 
+
+CURSOR_CHILD_NO:
+Especifique o “Child Number” do Cursor a ser exibido. Se esse parâmetro não for fornecido, o plano de execução de todos os cursores correspondentes ao parâmetro sql_id informado serão exibidos. 
+
+FORMAT:					   
 									   
 BASIC: Exibe o minimo de informações sobre o plano de execução: O ID da operação, o nome da operação e o nome do objeto que será tratado pela operação.
 
