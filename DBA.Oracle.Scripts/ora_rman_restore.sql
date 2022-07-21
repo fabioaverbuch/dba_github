@@ -1,17 +1,17 @@
 
-mkdir -p /u01/app/oracle/oradata/prodcad1
-mkdir -p /u01/app/oracle/admin/prodcad1/adump 
-mkdir -p /u01/app/oracle/admin/prodcad1/bdump 
-mkdir -p /u01/app/oracle/admin/prodcad1/cdump 
-mkdir -p /u01/app/oracle/admin/prodcad1/udump 
+mkdir -p /u01/app/oracle/oradata/<ORACLE_SID>
+mkdir -p /u01/app/oracle/admin/<ORACLE_SID>/adump 
+mkdir -p /u01/app/oracle/admin/<ORACLE_SID>/bdump 
+mkdir -p /u01/app/oracle/admin/<ORACLE_SID>/cdump 
+mkdir -p /u01/app/oracle/admin/<ORACLE_SID>/udump 
 
-export ORACLE_SID=prodcad1
+export ORACLE_SID=<ORACLE_SID>
 # rman target / nocatalog
-STARTUP NOMOUNT PFILE=$ORACLE_HOME/dbs/initprodcad1.ora;
+STARTUP NOMOUNT PFILE=$ORACLE_HOME/dbs/init<ORACLE_SID>.ora;
 
-RESTORE CONTROLFILE FROM '/hd-externo/mnt/orabkp/rman/c-3405516148-20210605-00_CTRL.ctl' ;
+RESTORE CONTROLFILE FROM '/mnt/orabkp/rman/c-3405516148-20210605-00_CTRL.ctl' ;
 ALTER DATABASE MOUNT ;
-CATALOG START WITH '/hd-externo/mnt/orabkp/rman/' noprompt ;
+CATALOG START WITH '/mnt/orabkp/rman/' noprompt ;
 CROSSCHECK BACKUP ;
 
 run {
@@ -34,12 +34,12 @@ SWITCH DATAFILE ALL;
 
 RECOVER DATABASE;
 
-SET ARCHIVELOG DESTINATION TO '/hd-externo/mnt/orabkp/rman/';
+SET ARCHIVELOG DESTINATION TO '/mnt/orabkp/rman/';
 
 RESTORE ARCHIVELOG ALL;
 
 }
 
-nohup rman target / nocatalog @prodcad1_restore.sh & > prodcad1_restore.log
+nohup rman target / nocatalog @RESTORE.sh & > RESTORE.log
 
 RMAN> ALTER DATABASE OPEN RESETLOGS;

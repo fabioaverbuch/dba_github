@@ -1,5 +1,3 @@
-ALTER SESSION SET NLS_LANGUAGE = 'BRAZILIAN PORTUGUESE';
-ALTER SESSION SET NLS_TERRITORY = 'BRAZIL';
 SET ECHO OFF
 SET LINESIZE 95
 SET HEAD ON
@@ -18,4 +16,4 @@ substr(PROGRAM||module,1,50) PROGRAM,substr(machine,1,22) machine,
 to_char(logon_time,'dd/mm/yy hh24:mi') login,
 last_call_et "last call",status
 FROM gv$session WHERE status='ACTIVE'
-ORDER BY 1
+ORDER BY 1;
